@@ -36,9 +36,9 @@ public class Step implements Parcelable {
     public Step(Parcel in) {
         this.id = in.readInt();
         this.shortDescription = in.readString();
-        this.description = in.readString();;
-        this.videoURL = in.readString();;
-        this.thumbnailURL = in.readString();;
+        this.description = in.readString();
+        this.videoURL = in.readString();
+        this.thumbnailURL = in.readString();
     }
 
     /** returns step id as described in the JSON response
@@ -109,8 +109,8 @@ public class Step implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(id);
         parcel.writeString(shortDescription);
-        parcel.writeString(description);;
-        parcel.writeString(videoURL);;
+        parcel.writeString(description);
+        parcel.writeString(videoURL);
         parcel.writeString(thumbnailURL);
     }
 
