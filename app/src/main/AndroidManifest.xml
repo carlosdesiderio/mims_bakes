@@ -18,6 +18,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider android:authorities="uk.me.desiderio.mimsbakes"
+            android:name=".data.BakesContentProvider"
+            android:exported="false" />
+
+        <service android:name=".data.BakesDataIntentService" />
     </application>
 
 </manifest>

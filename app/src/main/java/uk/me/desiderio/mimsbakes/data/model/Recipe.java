@@ -6,6 +6,9 @@ import android.os.Parcelable;
 
 import java.util.List;
 
+import uk.me.desiderio.mimsbakes.data.BakesContract;
+import uk.me.desiderio.mimsbakes.data.BakesContract.RecipeEntry;
+
 /**
  * holds data about a recipe. The class is used to parse recipe data from JSON with GSON
  */
@@ -15,12 +18,12 @@ public class Recipe implements Parcelable {
     private static final byte PARCEL_FLAG_WITH_LIST = (byte) 0x00;
     private static final byte PARCEL_FLAG_WITHOUT_LIST = (byte) 0x01;
 
-    public static final String NODE_NAME_ID = "id";
-    public static final String NODE_NAME_NAME = "name";
+    public static final String NODE_NAME_ID = RecipeEntry.COLUMN_NAME_ID;
+    public static final String NODE_NAME_NAME = RecipeEntry.COLUMN_NAME_NAME;
     public static final String NODE_NAME_INGREDIENTS = "ingredients";
     public static final String NODE_NAME_STEPS = "steps";
-    public static final String NODE_NAME_SERVINGS = "servings";
-    public static final String NODE_NAME_IMAGE = "image";
+    public static final String NODE_NAME_SERVINGS = RecipeEntry.COLUMN_NAME_SERVINGS;
+    public static final String NODE_NAME_IMAGE = RecipeEntry.COLUMN_NAME_IMAGE;
 
     private int id;
     private String name;
@@ -80,6 +83,14 @@ public class Recipe implements Parcelable {
         this.ingredients = ingredients;
     }
 
+    public void addIngredient(Ingredient ingredient) {
+        this.ingredients.add(ingredient);
+    }
+
+    public void addStep(Step step) {
+        this.steps.add(step);
+    }
+
     /** returns list of steps involved to produce the recipe */
     public List<Step> getSteps() {
         return steps;
@@ -121,6 +132,18 @@ public class Recipe implements Parcelable {
     }
 
     @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder("Recipe: \n");
+        builder.append("Name: " + name);
+        builder.append("\nServings: " +servings);
+        builder.append("\nIngredients: " +ingredients.size());
+        builder.append("\nSteps: " + steps.size());
+        builder.append("\nUrl: " +image);
+
+        return builder.toString();
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -156,5 +179,4 @@ public class Recipe implements Parcelable {
             return new Recipe[size];
         }
     };
-
 }

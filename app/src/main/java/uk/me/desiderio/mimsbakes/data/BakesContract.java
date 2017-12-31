@@ -1,5 +1,6 @@
 package uk.me.desiderio.mimsbakes.data;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
@@ -8,20 +9,38 @@ import android.provider.BaseColumns;
 
 // TODO add urimatcher test lesson 10 video 15 and all the test in that lesson examples
 // TODO: 06/12/2017 NEXT   create data base + test || create provider || then android service and task to load data
-class BakesContract {
+public class BakesContract {
+
+    static final String CONTENT_AUTHORITY = "uk.me.desiderio.mimsbakes";
+    private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
 
-    static final class RecipeEntry implements BaseColumns {
+    static final String PATH_RECIPES = "recipes";
+    static final String PATH_INGREDIENTS = "ingredients";
+    static final String PATH_STEPS = "steps";
+
+
+    public static final class RecipeEntry implements BaseColumns {
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.
+                buildUpon().
+                appendPath(PATH_RECIPES).
+                build();
+
         static final String TABLE_NAME = "recipes";
 
-        static final String COLUMN_NAME_ID = "recipeId";
-        static final String COLUMN_NAME_NAME = "name";
-        static final String COLUMN_NAME_SERVINGS = "servings";
-        static final String COLUMN_NAME_IMAGE = "image";
+        public static final String COLUMN_NAME_ID = "recipeId";
+        public static final String COLUMN_NAME_NAME = "name";
+        public static final String COLUMN_NAME_SERVINGS = "servings";
+        public static final String COLUMN_NAME_IMAGE = "image";
 
     }
 
-    static final class IngredientEntry implements BaseColumns {
+    public static final class IngredientEntry implements BaseColumns {
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.
+                buildUpon().
+                appendPath(PATH_INGREDIENTS).
+                build();
+
         static final String TABLE_NAME = "ingredients";
 
         static final String COLUMN_NAME_INGREDIENT_QUANTITY = "quantity";
@@ -30,7 +49,12 @@ class BakesContract {
         static final String COLUMN_RECIPE_FOREING_KEY = "recipeForeign";
     }
 
-    static final class StepEntry implements BaseColumns {
+    public static final class StepEntry implements BaseColumns {
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.
+                buildUpon().
+                appendPath(PATH_STEPS).
+                build();
+
         static final String TABLE_NAME = "steps";
 
         static final String COLUMN_NAME_STEP_ID = "stepId";
