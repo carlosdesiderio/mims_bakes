@@ -2,4 +2,10 @@
     <string name="app_name">Mim\'s Bakes</string>
     <string name="main_empty_state_default_message">Can\'t load Recipes</string>
     <string name="recipe_image_content_description">Recipe image</string>
+    <string name="play_icon_content_description">Play icon</string>
+
+    <plurals name="recipe_servings_plural">
+        <item quantity="one">%d Serving</item>
+        <item quantity="other">%d Servings</item>
+    </plurals>
 </resources>

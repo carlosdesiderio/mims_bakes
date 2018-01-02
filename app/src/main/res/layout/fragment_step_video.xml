@@ -1,0 +1,14 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/teal_100"
+    tools:context="uk.me.desiderio.mimsbakes.StepVideoFragment">
+
+    <!-- TODO: Update blank fragment layout: insert video and finilize design -->
+    <TextView
+        android:id="@+id/step_description_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Temp text" />
+</FrameLayout>

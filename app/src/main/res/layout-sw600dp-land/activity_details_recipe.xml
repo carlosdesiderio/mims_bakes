@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:baselineAligned="false"
+    tools:context="uk.me.desiderio.mimsbakes.RecipeDetailsActivity">
+
+    <fragment
+        android:id="@+id/recipe_details_fragment"
+        android:name="uk.me.desiderio.mimsbakes.RecipeDetailsFragment"
+        android:layout_width="@dimen/two_pane_recipe_detail_list_width"
+        android:layout_height="match_parent" />
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray" />
+
+    <fragment
+        android:id="@+id/step_video_fragment"
+        android:name="uk.me.desiderio.mimsbakes.StepVideoFragment"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

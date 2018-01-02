@@ -4,9 +4,9 @@ import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import uk.me.desiderio.mimsbakes.data.BakesContract;
 import uk.me.desiderio.mimsbakes.data.BakesContract.RecipeEntry;
 
 /**
@@ -15,8 +15,8 @@ import uk.me.desiderio.mimsbakes.data.BakesContract.RecipeEntry;
 
 public class Recipe implements Parcelable {
 
-    private static final byte PARCEL_FLAG_WITH_LIST = (byte) 0x00;
-    private static final byte PARCEL_FLAG_WITHOUT_LIST = (byte) 0x01;
+    private static final byte PARCEL_FLAG_WITH_LIST = (byte) 0x01;
+    private static final byte PARCEL_FLAG_WITHOUT_LIST = (byte) 0x00;
 
     public static final String NODE_NAME_ID = RecipeEntry.COLUMN_NAME_ID;
     public static final String NODE_NAME_NAME = RecipeEntry.COLUMN_NAME_NAME;
@@ -48,11 +48,18 @@ public class Recipe implements Parcelable {
         this.name = in.readString();
         this.servings = in.readInt();
         this.image = in.readString();
-        if(in.readByte() == PARCEL_FLAG_WITH_LIST) {
-            in.readTypedList(this.ingredients, Ingredient.CREATOR);
+
+        if (in.readByte() == 0x01) {
+            ingredients = new ArrayList<>();
+            in.readList(ingredients, Ingredient.class.getClassLoader());
+        } else {
+            ingredients = null;
         }
-        if(in.readByte() == PARCEL_FLAG_WITH_LIST) {
-            in.readTypedList(this.steps, Step.CREATOR);
+        if (in.readByte() == 0x01) {
+            steps = new ArrayList<>();
+            in.readList(steps, Step.class.getClassLoader());
+        } else {
+            steps = null;
         }
     }
 
@@ -131,7 +138,7 @@ public class Recipe implements Parcelable {
         return values;
     }
 
-    @Override
+   /* @Override
     public String toString() {
         StringBuilder builder = new StringBuilder("Recipe: \n");
         builder.append("Name: " + name);
@@ -141,7 +148,7 @@ public class Recipe implements Parcelable {
         builder.append("\nUrl: " +image);
 
         return builder.toString();
-    }
+    }*/
 
     @Override
     public int describeContents() {
@@ -154,17 +161,17 @@ public class Recipe implements Parcelable {
         parcel.writeString(name);
         parcel.writeInt(servings);
         parcel.writeString(image);
-        if(ingredients != null) {
-            parcel.writeByte(PARCEL_FLAG_WITH_LIST);
+        if (ingredients == null) {
+            parcel.writeByte((byte) (0x00));
+        } else {
+            parcel.writeByte((byte) (0x01));
             parcel.writeList(ingredients);
-        } else {
-            parcel.writeByte(PARCEL_FLAG_WITHOUT_LIST);
         }
-        if(steps != null) {
-            parcel.writeByte(PARCEL_FLAG_WITH_LIST);
-            parcel.writeList(steps);
+        if (steps == null) {
+            parcel.writeByte((byte) (0x00));
         } else {
-            parcel.writeByte(PARCEL_FLAG_WITHOUT_LIST);
+            parcel.writeByte((byte) (0x01));
+            parcel.writeList(steps);
         }
     }
 

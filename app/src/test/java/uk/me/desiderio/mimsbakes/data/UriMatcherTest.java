@@ -6,19 +6,15 @@ import android.net.Uri;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-
-import java.net.URI;
 
 import uk.me.desiderio.mimsbakes.data.BakesContract.IngredientEntry;
 import uk.me.desiderio.mimsbakes.data.BakesContract.RecipeEntry;
 import uk.me.desiderio.mimsbakes.data.BakesContract.StepEntry;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.hamcrest.Matchers.is;
 
 /**
  * Unit test for {@link UriMatcher} at the {@link BakesContentProvider}

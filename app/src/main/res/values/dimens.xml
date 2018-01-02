@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="cardview_lateral_margin">16dp</dimen>
+    <dimen name="cardview_horizontal_text_margin">16dp</dimen>
+    <dimen name="cardview_vertical_text_margin">24dp</dimen>
+    <dimen name="cardview_external_margin">8dp</dimen>
+
+    <dimen name="two_pane_recipe_detail_list_width">300dp</dimen>
+    <dimen name="external_list_margin">16dp</dimen>
+
+    <dimen name="step_thumbnail_size">48dp</dimen>
+    <dimen name="step_play_icon_size">32dp</dimen>
+
+
 </resources>

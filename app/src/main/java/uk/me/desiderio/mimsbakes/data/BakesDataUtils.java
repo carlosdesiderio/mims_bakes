@@ -40,7 +40,7 @@ public class BakesDataUtils {
             String name = cursor.getString(cursor.getColumnIndex(RecipeEntry.COLUMN_NAME_NAME));
             int servings = cursor.getInt(cursor.getColumnIndex(RecipeEntry.COLUMN_NAME_SERVINGS));
             String imageURLString = cursor.getString(cursor.getColumnIndex(RecipeEntry
-                    .COLUMN_NAME_IMAGE));;
+                    .COLUMN_NAME_IMAGE));
 
             Recipe recipe = new Recipe(recipeId,
                     name,
