@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Mim\'s Bakes</string>
+    <string name="main_empty_state_default_message">Can\'t load Recipes</string>
+    <string name="recipe_image_content_description">Recipe image</string>
 </resources>
