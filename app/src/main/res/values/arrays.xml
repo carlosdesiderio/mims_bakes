@@ -9,7 +9,6 @@
         <item>@drawable/recipe_thumb_default_6</item>
         <item>@drawable/recipe_thumb_default_7</item>
         <item>@drawable/recipe_thumb_default_8</item>
-        <item>@drawable/recipe_thumb_default_9</item>
     </array>
     <array name="step_thumb_placeholder">
         <item>@drawable/step_thumb_default_1</item>
