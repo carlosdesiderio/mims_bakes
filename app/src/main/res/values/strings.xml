@@ -8,4 +8,6 @@
         <item quantity="one">%d Serving</item>
         <item quantity="other">%d Servings</item>
     </plurals>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>

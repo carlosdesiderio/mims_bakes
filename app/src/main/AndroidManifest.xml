@@ -28,6 +28,16 @@
 
         <activity android:name=".RecipeDetailsActivity" />
         <activity android:name=".StepVideoActivity" />
+
+        <receiver android:name=".widget.BakesAppWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/bakes_app_widget_info" />
+        </receiver>
     </application>
 
 </manifest>
