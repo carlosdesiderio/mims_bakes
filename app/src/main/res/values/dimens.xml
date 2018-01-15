@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="cardview_horizontal_text_margin">16dp</dimen>
     <dimen name="cardview_vertical_text_margin">24dp</dimen>
     <dimen name="cardview_external_margin">8dp</dimen>
 
@@ -10,5 +9,10 @@
     <dimen name="step_thumbnail_size">48dp</dimen>
     <dimen name="step_play_icon_size">32dp</dimen>
 
+    <dimen name="player_controls_horizontal_lateral_margin">8dp</dimen>
+    <dimen name="step_video_fragment_vertical_text_margin">16dp</dimen>
+
+    <!--used in cardview and stepvideofragment text-->
+    <dimen name="horizontal_text_margin">16dp</dimen>
 
 </resources>

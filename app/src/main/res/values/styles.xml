@@ -16,4 +16,8 @@
         <item name="android:textColor">@color/teal_800</item>
     </style>
 
+    <style name="AppTheme.ProgressBarCustomized" parent="@style/Theme.AppCompat">
+        <item name="colorAccent">#fff</item>
+    </style>
+
 </resources>
