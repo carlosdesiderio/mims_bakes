@@ -10,4 +10,10 @@
     </plurals>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+
+    <string name="shopping_message_all_ingredients">All ingredients</string>
+    <!--\u0020 unicode for white space-->
+    <string name="shopping_message_removed">\u0020removed from</string>
+    <string name="shopping_message_added">\u0020added to</string>
+    <string name="shopping_message_end">\u0020your shopping list.</string>
 </resources>

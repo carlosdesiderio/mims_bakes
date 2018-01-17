@@ -13,23 +13,27 @@ public class Ingredient implements Parcelable {
     public static final String NODE_NAME_INGREDIENT_QUANTITY = "quantity";
     public static final String NODE_NAME_INGREDIENT_MEASURE = "measure";
     public static final String NODE_NAME_INGREDIENT_NAME = "ingredient";
+    public static final String NODE_NAME_INGREDIENT_SHOPPING = "shopping";
 
     private float quantity;
     private String measure;
     private String ingredient;
+    private int shoppingFlag;
 
     public Ingredient() {}
 
-    public Ingredient(String name, float quantity, String measure) {
+    public Ingredient(String name, float quantity, String measure, int shoppingFlag) {
         this.ingredient = name;
         this.quantity = quantity;
         this.measure = measure;
+        this.shoppingFlag = shoppingFlag;
     }
 
     public Ingredient(Parcel in) {
         this.ingredient = in.readString();
         this.quantity = in.readFloat();
         this.measure = in.readString();
+        this.shoppingFlag = in.readInt();
     }
 
     /** returns ingredient name */
@@ -59,6 +63,10 @@ public class Ingredient implements Parcelable {
         this.measure = measure;
     }
 
+    public int getShoppingFlag() {
+        return shoppingFlag;
+    }
+
     /** returns a {@link android.content.ContentValues} object with the ingredient's property value
      * to be stored in the local database.
      */
@@ -80,6 +88,7 @@ public class Ingredient implements Parcelable {
         parcel.writeString(ingredient);
         parcel.writeFloat(quantity);
         parcel.writeString(measure);
+        parcel.writeInt(shoppingFlag);
     }
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<Ingredient> CREATOR

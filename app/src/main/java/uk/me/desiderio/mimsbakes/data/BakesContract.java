@@ -18,6 +18,7 @@ public class BakesContract {
     static final String PATH_RECIPES = "recipes";
     static final String PATH_INGREDIENTS = "ingredients";
     static final String PATH_STEPS = "steps";
+    static final String PATH_SHOPPING = "shopping";
 
 
     public static final class RecipeEntry implements BaseColumns {
@@ -41,12 +42,26 @@ public class BakesContract {
                 appendPath(PATH_INGREDIENTS).
                 build();
 
-        static final String TABLE_NAME = "ingredients";
+        public static final String TABLE_NAME = "ingredients";
 
-        static final String COLUMN_NAME_INGREDIENT_QUANTITY = "quantity";
-        static final String COLUMN_NAME_INGREDIENT_MEASURE = "measure";
-        static final String COLUMN_NAME_INGREDIENT_NAME = "ingredient";
-        static final String COLUMN_RECIPE_FOREING_KEY = "recipeForeign";
+        public static final String COLUMN_NAME_INGREDIENT_QUANTITY = "quantity";
+        public static final String COLUMN_NAME_INGREDIENT_MEASURE = "measure";
+        public static final String COLUMN_NAME_INGREDIENT_NAME = "ingredient";
+        public static final String COLUMN_RECIPE_FOREING_KEY = "recipeForeign";
+        public static final String FLAG_NAME_SHOPPING = "shopping";
+
+    }
+
+    public static final class ShoppingEntry implements BaseColumns {
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.
+                buildUpon().
+                appendPath(PATH_SHOPPING).
+                build();
+
+        public static final String TABLE_NAME = "shopping";
+
+        public static final String COLUMN_NAME_INGREDIENT_NAME = "shop_ingredient";
+        public static final String COLUMN_RECIPE_FOREING_KEY = "shop_recipeForeign";
     }
 
     public static final class StepEntry implements BaseColumns {
@@ -63,7 +78,5 @@ public class BakesContract {
         static final String COLUMN_NAME_STEP_VIDEO_URL = "videoURL";
         static final String COLUMN_NAME_STEP_THUMBNAIL_URL = "thumbnailURL";
         static final String COLUMN_RECIPE_FOREING_KEY = "recipeForeign";
-
-
     }
 }

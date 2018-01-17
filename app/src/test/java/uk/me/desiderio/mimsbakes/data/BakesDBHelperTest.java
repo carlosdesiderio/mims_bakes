@@ -16,6 +16,7 @@ import java.util.List;
 
 import uk.me.desiderio.mimsbakes.data.BakesContract.IngredientEntry;
 import uk.me.desiderio.mimsbakes.data.BakesContract.RecipeEntry;
+import uk.me.desiderio.mimsbakes.data.BakesContract.ShoppingEntry;
 import uk.me.desiderio.mimsbakes.data.BakesContract.StepEntry;
 import uk.me.desiderio.mimsbakes.data.DatabaseSchemaTestHelper.TableDescription;
 
@@ -151,6 +152,36 @@ public class BakesDBHelperTest {
         TableDescription foreignKeyDescription =
                 getColumnDetailsOrNull(database, IngredientEntry.TABLE_NAME, IngredientEntry.COLUMN_RECIPE_FOREING_KEY);
         assertEquals(IngredientEntry.COLUMN_RECIPE_FOREING_KEY, foreignKeyDescription.name);
+        assertEquals(DB_ROW_TYPE_INTEGER, foreignKeyDescription.type);
+        assertTrue(foreignKeyDescription.isNotNull);
+    }
+
+    @Test
+    public void whenDBCreated_shoppingTableHasRightFormat() {
+        List<String> columnNames = DatabaseSchemaTestHelper.listColumnNames(database, ShoppingEntry
+                .TABLE_NAME);
+        assertThat(columnNames).containsExactly(
+                ShoppingEntry._ID,
+                ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME,
+                ShoppingEntry.COLUMN_RECIPE_FOREING_KEY);
+
+        TableDescription rowIdDescription =
+                getColumnDetailsOrNull(database, ShoppingEntry.TABLE_NAME, ShoppingEntry._ID);
+        assertEquals(ShoppingEntry._ID, rowIdDescription.name);
+        assertEquals(DB_ROW_TYPE_INTEGER, rowIdDescription.type);
+        assertFalse(rowIdDescription.isNotNull);
+        assertTrue(rowIdDescription.isPk);
+
+        TableDescription nameDescription =
+                getColumnDetailsOrNull(database, ShoppingEntry.TABLE_NAME, ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME);
+        assertEquals(ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME, nameDescription.name);
+        assertEquals(DB_ROW_TYPE_TEXT, nameDescription.type);
+        assertTrue(nameDescription.isNotNull);
+
+
+        TableDescription foreignKeyDescription =
+                getColumnDetailsOrNull(database, ShoppingEntry.TABLE_NAME, ShoppingEntry.COLUMN_RECIPE_FOREING_KEY);
+        assertEquals(ShoppingEntry.COLUMN_RECIPE_FOREING_KEY, foreignKeyDescription.name);
         assertEquals(DB_ROW_TYPE_INTEGER, foreignKeyDescription.type);
         assertTrue(foreignKeyDescription.isNotNull);
     }
@@ -324,10 +355,81 @@ public class BakesDBHelperTest {
         ingredientCursor.moveToFirst();
         assertEquals(ingredientCount, ingredientCursor.getCount());
     }
+    @Test
+    public void
+    givenARecipe_whenIngredientsAreAddedToShopping_thenShoppingListIngredientCanBeRetrived
+            () {
+        int recipeId = 6;
+        int ingredientCount = 9;
+
+        database.insert(RecipeEntry.TABLE_NAME, null, getMockRecipe(recipeId));
+
+        // insert ingredients of two different recipes
+        List<ContentValues> ingredientList = getMockIngredients(ingredientCount, recipeId);
+
+        for (int i = 0; i < ingredientList.size(); i++) {
+            float insertId = database.insert(IngredientEntry.TABLE_NAME, null, ingredientList.get(i));
+            assertThat(insertId).isNotNegative();
+        }
+        Cursor ingredientCursor = database.query(IngredientEntry.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        // insert ingredient in shopping table
+        ingredientCursor.moveToPosition(2);
+        String expectedIngredientName =
+                ingredientCursor.getString(ingredientCursor.getColumnIndex
+                        (IngredientEntry.COLUMN_NAME_INGREDIENT_NAME));
+        float expectedIngredientQuantity =
+                ingredientCursor.getFloat(ingredientCursor.getColumnIndex
+                        (IngredientEntry.COLUMN_NAME_INGREDIENT_QUANTITY));
+        int ingredientRecipeId =
+                ingredientCursor.getInt(ingredientCursor.getColumnIndex
+                        (IngredientEntry.COLUMN_RECIPE_FOREING_KEY));
+
+        ContentValues shoppingValues = new ContentValues();
+        shoppingValues.put(ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME, expectedIngredientName);
+        shoppingValues.put(ShoppingEntry.COLUMN_RECIPE_FOREING_KEY, ingredientRecipeId);
+
+        float shoppingInsertId = database.insert(ShoppingEntry.TABLE_NAME, null, shoppingValues);
+        assertThat(shoppingInsertId).isNotNegative();
+
+        String[] projection = new String[]{IngredientEntry.COLUMN_NAME_INGREDIENT_NAME,
+                IngredientEntry.COLUMN_NAME_INGREDIENT_QUANTITY,
+                IngredientEntry.COLUMN_NAME_INGREDIENT_MEASURE};
+        String shoppingSelection =
+                IngredientEntry.COLUMN_RECIPE_FOREING_KEY + " = " + ShoppingEntry.COLUMN_RECIPE_FOREING_KEY +
+                        " AND " +
+                IngredientEntry.COLUMN_NAME_INGREDIENT_NAME + " = " + ShoppingEntry
+                        .COLUMN_NAME_INGREDIENT_NAME;
+
+        Cursor shoppingCursor = database.query(
+                IngredientEntry.TABLE_NAME + " , " + ShoppingEntry.TABLE_NAME,
+                projection,
+                shoppingSelection,
+                                null,
+                null,
+                null,
+                null
+        );
+        assertNotNull(shoppingCursor);
+        shoppingCursor.moveToFirst();
+        String shoppingIngredientName = shoppingCursor.getString(shoppingCursor
+                .getColumnIndex(IngredientEntry.COLUMN_NAME_INGREDIENT_NAME));
+        float shoppingIngredientQuantity = shoppingCursor.getFloat(
+                shoppingCursor.getColumnIndex(IngredientEntry.COLUMN_NAME_INGREDIENT_QUANTITY));
+        assertEquals(1, shoppingCursor.getCount());
+        assertEquals(expectedIngredientName, shoppingIngredientName);
+        assertEquals(expectedIngredientQuantity, shoppingIngredientQuantity);
+    }
 
 
     @Test
-    public void givenARecipe_whenStepsAreInserted_thenIngredientCanBeRetrivedWithRecipeId
+    public void givenARecipe_whenStepsAreInserted_thenStepCanBeRetrivedWithRecipeId
             () {
         int recipeId = 6;
         int unrelatedRecipeId = 9;

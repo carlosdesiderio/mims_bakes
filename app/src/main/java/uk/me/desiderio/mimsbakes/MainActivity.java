@@ -17,6 +17,9 @@ import uk.me.desiderio.mimsbakes.data.BakesDataIntentService;
 import uk.me.desiderio.mimsbakes.data.BakesDataUtils;
 import uk.me.desiderio.mimsbakes.data.model.Recipe;
 
+import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.EXTRA_TASK_TYPE;
+import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.TASK_REQUEST_SERVER_DATA;
+
 public class MainActivity extends AppCompatActivity implements LoaderManager
         .LoaderCallbacks<Cursor>, RecipeListAdapter.RecipeClickListener {
 
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
 
         Intent dataIntent = new Intent(this, BakesDataIntentService.class);
+        dataIntent.putExtra(EXTRA_TASK_TYPE, TASK_REQUEST_SERVER_DATA);
         startService(dataIntent);
     }
 

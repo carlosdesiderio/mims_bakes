@@ -19,7 +19,10 @@
         android:id="@+id/step_ingredients_recycler_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/external_list_margin"
+        android:layout_marginTop="@dimen/external_list_margin"
+        android:layout_marginBottom="@dimen/external_list_margin"
+        android:layout_marginEnd="@dimen/external_list_margin"
+        android:layout_marginStart="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/step_thumbnail_image_view"
         app:layout_constraintTop_toTopOf="parent" />

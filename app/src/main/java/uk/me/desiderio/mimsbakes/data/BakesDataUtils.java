@@ -68,6 +68,12 @@ public class BakesDataUtils {
                 selectionArgs,
                 null);
 
+        recipe.setIngredients(getIngredientListFromCursor(cursor));
+    }
+
+    public static List<Ingredient> getIngredientListFromCursor(Cursor cursor) {
+        List<Ingredient> ingredientList = new ArrayList<>();
+
         while(cursor.moveToNext()) {
             String name = cursor.getString(cursor.getColumnIndex(IngredientEntry
                     .COLUMN_NAME_INGREDIENT_NAME));
@@ -75,10 +81,13 @@ public class BakesDataUtils {
                     .COLUMN_NAME_INGREDIENT_QUANTITY));
             String measure = cursor.getString(cursor.getColumnIndex(IngredientEntry
                     .COLUMN_NAME_INGREDIENT_MEASURE));
-            Ingredient ingredient = new Ingredient(name, quantity, measure);
+            int shopping = cursor.getInt(cursor.getColumnIndex(IngredientEntry.FLAG_NAME_SHOPPING));
 
-            recipe.addIngredient(ingredient);
+            Ingredient ingredient = new Ingredient(name, quantity, measure, shopping);
+            ingredientList.add(ingredient);
         }
+
+        return ingredientList;
     }
 
     void addSteps(Recipe recipe) {

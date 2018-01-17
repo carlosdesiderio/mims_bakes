@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import uk.me.desiderio.mimsbakes.InternalIngredientListAdapter.OnClickIngredientListener;
 import uk.me.desiderio.mimsbakes.data.model.Ingredient;
 import uk.me.desiderio.mimsbakes.data.model.Recipe;
 import uk.me.desiderio.mimsbakes.data.model.Step;
@@ -32,10 +33,12 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
     private static final int VIEW_TYPE_STEP = 4;
 
     private Recipe recipe;
-    private OnClickListItemListener clickListener;
+    private final OnClickListItemListener clickListener;
+
 
     public interface OnClickListItemListener {
-        void onClick(Step step);
+        void onStepSelected(Step step);
+        void onIngredientSelected(Ingredient ingredient, int recipeId);
     }
 
     public RecipeDetailsAdapter(OnClickListItemListener clickListener) {
@@ -83,7 +86,7 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     @Override
                     public void onClick(View view) {
                         if (clickListener != null) {
-                            clickListener.onClick(step);
+                            clickListener.onStepSelected(step);
                         }
                     }
                 });
@@ -130,15 +133,29 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
         notifyDataSetChanged();
     }
 
-    // returns the step list index. Remove one as the first list item
-    // is reserved for the ingredient list
+    /** refreshes ingredient data
+     * used when adding and removing ingredients to shopping list
+     */
+    public void updateIngredientList(List<Ingredient> ingredientList) {
+        this.recipe.setIngredients(ingredientList);
+        notifyDataSetChanged();
+    }
+
+    public Recipe getData() {
+        return recipe;
+    }
+
+    /**
+     * returns the step list index. Remove one as the first list item
+     * is reserved for the ingredient list
+     */
     private int getStepIndexFromPosition(int position) {
         return position - 1;
     }
 
     public class IngredientViewHolder extends RecyclerView.ViewHolder{
-        public RecyclerView ingredienRecyclerView;
-        public InternalIngredientListAdapter adapter;
+        public final RecyclerView ingredienRecyclerView;
+        public final InternalIngredientListAdapter adapter;
 
         public IngredientViewHolder(View itemView) {
             super(itemView);
@@ -149,12 +166,20 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
             ingredienRecyclerView.setLayoutManager(layoutManager);
             adapter = new InternalIngredientListAdapter();
             ingredienRecyclerView.setAdapter(adapter);
+            adapter.setClickListener(new OnClickIngredientListener() {
+                @Override
+                public void onIngredientSelected(Ingredient ingredient) {
+                    if(clickListener != null) {
+                        clickListener.onIngredientSelected(ingredient, recipe.getRecipeId());
+                    }
+                }
+            });
         }
     }
 
     public class StepViewHolder extends RecyclerView.ViewHolder{
-        public ImageView stepImageView;
-        public TextView stepSmallDesc;
+        public final ImageView stepImageView;
+        public final TextView stepSmallDesc;
 
         public StepViewHolder(View itemView) {
             super(itemView);

@@ -2,6 +2,7 @@ package uk.me.desiderio.mimsbakes;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
+import uk.me.desiderio.mimsbakes.data.model.Ingredient;
 import uk.me.desiderio.mimsbakes.data.model.Recipe;
 import uk.me.desiderio.mimsbakes.data.model.Step;
 
@@ -30,8 +34,16 @@ public class RecipeDetailsFragment extends Fragment implements RecipeDetailsAdap
         adapter.swapRecipe(recipe);
     }
 
+    public void updateIngredients(List<Ingredient> ingredientList) {
+        adapter.updateIngredientList(ingredientList);
+    }
+
+    public Recipe getData() {
+        return adapter.getData();
+    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_recipe_details, container, false);
         RecyclerView recyclerView = rootView.findViewById(R.id.recipe_details_recycler_view);
@@ -65,13 +77,21 @@ public class RecipeDetailsFragment extends Fragment implements RecipeDetailsAdap
     }
 
     @Override
-    public void onClick(Step step) {
+    public void onStepSelected(Step step) {
         if (listener != null) {
             listener.onRecipeStepSelected(step);
         }
     }
 
+    @Override
+    public void onIngredientSelected(Ingredient ingredient, int recipeId) {
+        if(listener != null){
+            listener.onRecipeIngredientSelected(ingredient, recipeId);
+        }
+    }
+
     public interface OnRecipeDetailsFragmentItemClickListener {
         void onRecipeStepSelected(Step step);
+        void onRecipeIngredientSelected(Ingredient ingredient, int recipeId);
     }
 }
