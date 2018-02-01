@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#E65100</color>
-    <color name="colorPrimary_20a">#E3265100</color>
     <color name="colorPrimaryDark">#6D4C41</color>
-    <color name="colorAccent">#40C4FF</color>
+    <color name="colorPrimary">#E65100</color>
+    <color name="colorPrimaryLight">@color/amber_600</color>
+    <color name="colorPrimaryBright">@color/amber_800</color>
+    <color name="colorAccent">@color/pink_a400</color>
 
+    <color name="colorFontPrimary">@color/teal_800</color>
+    <color name="colorFontDark">@color/teal_900</color>
+
+    <color name="colorBackground">@color/amber_100</color>
+    <color name="colorPlayerControlBackground">@color/pink_a400_a50</color>
+
+    <!-- material colour codes -->
+
+    <color name="teal_900">#004D40</color>
     <color name="teal_800">#00695C</color>
-    <color name="teal_800_20">#3200695C</color>
-    <color name="teal_50">#E0F2F1</color>
-    <color name="teal_100">#B2DFDB</color>
-    <color name="amber_a400">#FFC400</color>
+
+    <color name="amber_800">#FF8F00</color>
+    <color name="amber_600">#FFB300</color>
+    <color name="amber_100">#FFECB3</color>
+
+    <color name="pink_a400">#F50057</color>
+    <color name="pink_a400_a50">#4DF50057</color>
+
+    <color name="white">#FFFFFF</color>
+
+    <color name="ic_launcher_background">#F50057</color>
 </resources>
