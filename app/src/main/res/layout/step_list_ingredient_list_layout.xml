@@ -3,14 +3,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:elevation="2dp"
+    android:paddingBottom="16dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/step_thumbnail_image_view"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="@dimen/ingredient_icon_size"
+        android:layout_height="@dimen/ingredient_icon_size"
+        android:layout_marginStart="@dimen/default_external_margin"
+        android:layout_marginTop="@dimen/default_external_margin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:src="@drawable/ingredients_logo" />
@@ -19,10 +21,10 @@
         android:id="@+id/step_ingredients_recycler_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/external_list_margin"
-        android:layout_marginBottom="@dimen/external_list_margin"
-        android:layout_marginEnd="@dimen/external_list_margin"
-        android:layout_marginStart="8dp"
+        android:layout_marginTop="@dimen/default_external_margin"
+        android:layout_marginBottom="@dimen/default_external_margin"
+        android:layout_marginEnd="@dimen/default_external_margin"
+        android:layout_marginStart="@dimen/small_external_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/step_thumbnail_image_view"
         app:layout_constraintTop_toTopOf="parent" />

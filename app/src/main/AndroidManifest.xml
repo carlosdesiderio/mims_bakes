@@ -22,11 +22,12 @@
         <provider
             android:name=".data.BakesContentProvider"
             android:authorities="uk.me.desiderio.mimsbakes"
-            android:exported="false" />
+            android:exported="true" />
 
         <service android:name=".data.BakesDataIntentService" />
 
-        <activity android:name=".RecipeDetailsActivity" />
+        <activity android:name=".RecipeDetailsActivity"
+            android:launchMode="singleTop"/>
         <activity android:name=".StepVideoActivity" />
 
         <receiver android:name=".widget.BakesAppWidget">
@@ -38,6 +39,10 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/bakes_app_widget_info" />
         </receiver>
+        <service android:name=".widget.BakesWidgetUpdateService"
+            android:exported="false"/>
+        <service android:name=".widget.BakesRemoteViewService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

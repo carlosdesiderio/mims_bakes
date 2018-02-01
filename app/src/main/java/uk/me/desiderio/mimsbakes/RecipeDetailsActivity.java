@@ -20,21 +20,25 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.me.desiderio.mimsbakes.data.BakesContentProvider;
+import uk.me.desiderio.mimsbakes.data.BakesContract.RecipeEntry;
 import uk.me.desiderio.mimsbakes.data.BakesContract.ShoppingEntry;
 import uk.me.desiderio.mimsbakes.data.BakesDataIntentService;
 import uk.me.desiderio.mimsbakes.data.BakesDataUtils;
 import uk.me.desiderio.mimsbakes.data.model.Ingredient;
 import uk.me.desiderio.mimsbakes.data.model.Recipe;
 import uk.me.desiderio.mimsbakes.data.model.Step;
+import uk.me.desiderio.mimsbakes.widget.BakesWidgetUpdateService;
 
 import static uk.me.desiderio.mimsbakes.MainActivity.EXTRA_RECIPE;
+import static uk.me.desiderio.mimsbakes.MainActivity.EXTRA_RECIPE_ID;
 import static uk.me.desiderio.mimsbakes.StepVideoActivity.EXTRA_STEP;
 import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.BROADCAST_ACTION_INGREDIENT_SHOPPING;
-import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.EXTRA_INGREDIENT_LIST;
-import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.EXTRA_INGREDIENT_NAME;
-import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.EXTRA_INGREDIENT_SHOPPING_ACTION;
-import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.EXTRA_RECIPE_ID;
-import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.EXTRA_TASK_TYPE;
+import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.EXTRA_DATA_INGREDIENT_LIST;
+import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.EXTRA_DATA_INGREDIENT_NAME;
+import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.EXTRA_DATA_INGREDIENT_SHOPPING_ACTION;
+import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.EXTRA_DATA_RECIPE_ID;
+import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.EXTRA_DATA_TASK_TYPE;
 import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.SHOPPING_ACTION_INGREDIENT_DELETE;
 import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.SHOPPING_ACTION_INGREDIENT_INSERT;
 import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.TASK_BULK_DELETE_SHOP_INGREDIENT;
@@ -43,16 +47,20 @@ import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.TASK_DELETE_
 import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.TASK_INSERT_SHOP_INGREDIENT;
 
 public class RecipeDetailsActivity extends AppCompatActivity implements
-        RecipeDetailsFragment.OnRecipeDetailsFragmentItemClickListener,
-        LoaderManager.LoaderCallbacks<Cursor> {
+        RecipeDetailsFragment.OnRecipeDetailsFragmentItemClickListener {
 
     private static final String TAG = RecipeDetailsActivity.class.getSimpleName();
     private static final int STEP_REQUEST_CODE = 8;
-    private static final int LOADER_ID = 667;
+    private static final int RECIPE_LOADER_ID = 66;
+    private static final int INGREDIENTS_LOADER_ID = 68;
 
     // true in larger tablet screen where two pane layout will be shown
     private boolean isTwoPane;
     private Recipe recipe;
+    private int recipeId;
+    private BakesDataUtils dataUtils;
+
+    private RecipeLoaderCallbacks recipeLoaderCallbacks;
 
     private RecipeDetailsFragment detailsFragment;
     private StepVideoFragment stepVideoFragment;
@@ -67,11 +75,33 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
     };
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        initData(intent);
+        getSupportLoaderManager().restartLoader(RECIPE_LOADER_ID, null, recipeLoaderCallbacks);
+    }
+
+    private void initData(Intent intent) {
+        Log.d(TAG, "initData: contains recipe: " +
+                intent.getExtras().containsKey(EXTRA_RECIPE) +
+                " contains id: " + intent.getExtras().containsKey(EXTRA_RECIPE_ID)
+        );
+        if(intent.getExtras().containsKey(EXTRA_RECIPE)) {
+            recipe = intent.getParcelableExtra(EXTRA_RECIPE);
+            recipeId = recipe.getRecipeId();
+        } else if(intent.getExtras().containsKey(EXTRA_RECIPE_ID)){
+            recipeId = intent.getIntExtra(EXTRA_RECIPE_ID, 0);
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_recipe);
 
-        recipe = getIntent().getParcelableExtra(EXTRA_RECIPE);
+        dataUtils = new BakesDataUtils(this);
+
+        initData(getIntent());
 
         initLayoutType();
 
@@ -84,13 +114,20 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
                     .findFragmentById(R.id.step_video_fragment);
         }
 
-        detailsFragment.setData(recipe);
+        if(recipe != null){
+            detailsFragment.setData(recipe);
+        }
 
-        getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+        recipeLoaderCallbacks = new RecipeLoaderCallbacks();
+        IngredientsLoaderCallbacks ingredientsLoaderCallbacks = new IngredientsLoaderCallbacks();
+
+        getSupportLoaderManager().initLoader(RECIPE_LOADER_ID, null, recipeLoaderCallbacks);
+        getSupportLoaderManager().initLoader(INGREDIENTS_LOADER_ID, null, ingredientsLoaderCallbacks);
     }
 
     @Override
     protected void onResume() {
+        Log.d(TAG, "onResume: " + recipeId);
         LocalBroadcastManager.getInstance(this).registerReceiver(
                 ingredientActionsBroadcastReceiver,
                 new IntentFilter(BROADCAST_ACTION_INGREDIENT_SHOPPING));
@@ -100,6 +137,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
 
     @Override
     protected void onPause() {
+        Log.d(TAG, "onPause: " + recipeId);
         LocalBroadcastManager.getInstance(this).
                 unregisterReceiver(ingredientActionsBroadcastReceiver);
         super.onPause();
@@ -148,10 +186,10 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
                 TASK_BULK_INSERT_SHOP_INGREDIENT;
 
         Intent dataIntent = new Intent(this, BakesDataIntentService.class);
-        dataIntent.putExtra(EXTRA_TASK_TYPE, task);
-        dataIntent.putExtra(EXTRA_RECIPE_ID, recipeId);
+        dataIntent.putExtra(EXTRA_DATA_TASK_TYPE, task);
+        dataIntent.putExtra(EXTRA_DATA_RECIPE_ID, recipeId);
         dataIntent.putParcelableArrayListExtra(
-                EXTRA_INGREDIENT_LIST,
+                EXTRA_DATA_INGREDIENT_LIST,
                 new ArrayList<>(ingredientList));
         startService(dataIntent);
     }
@@ -173,14 +211,14 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
     private String getIngredientShopActionMessage(Intent intent) {
         StringBuilder stringBuilder;
 
-        if(intent.hasExtra(EXTRA_INGREDIENT_NAME)) {
-            String ingredientName = intent.getStringExtra(EXTRA_INGREDIENT_NAME);
+        if(intent.hasExtra(EXTRA_DATA_INGREDIENT_NAME)) {
+            String ingredientName = intent.getStringExtra(EXTRA_DATA_INGREDIENT_NAME);
             stringBuilder = new StringBuilder(ingredientName);
         } else {
             stringBuilder = new StringBuilder(getString(R.string.shopping_message_all_ingredients));
         }
 
-        String action = intent.getStringExtra(EXTRA_INGREDIENT_SHOPPING_ACTION);
+        String action = intent.getStringExtra(EXTRA_DATA_INGREDIENT_SHOPPING_ACTION);
         switch (action) {
             case SHOPPING_ACTION_INGREDIENT_DELETE:
                 stringBuilder.append(getString(R.string.shopping_message_removed));
@@ -219,9 +257,9 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
                 TASK_DELETE_SHOP_INGREDIENT;
 
         Intent intent = new Intent(this, BakesDataIntentService.class);
-        intent.putExtra(EXTRA_TASK_TYPE, task);
-        intent.putExtra(EXTRA_RECIPE_ID, recipeId);
-        intent.putExtra(EXTRA_INGREDIENT_NAME, ingredient.getName());
+        intent.putExtra(EXTRA_DATA_TASK_TYPE, task);
+        intent.putExtra(EXTRA_DATA_RECIPE_ID, recipeId);
+        intent.putExtra(EXTRA_DATA_INGREDIENT_NAME, ingredient.getName());
 
         startService(intent);
     }
@@ -246,28 +284,60 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
      * implements {@link LoaderManager.LoaderCallbacks}
      * updates view when ingredients are added or removed from the shopping list
      */
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String selection = ShoppingEntry.COLUMN_RECIPE_FOREING_KEY + "=? ";
-        String recipeIdString = String.valueOf(recipe.getRecipeId());
-        String[] selectionArgs = new String[]{recipeIdString};
+    private class IngredientsLoaderCallbacks implements LoaderManager.LoaderCallbacks<Cursor> {
 
-        return new CursorLoader(this,
-                ShoppingEntry.CONTENT_URI,
-                null,
-                selection,
-                selectionArgs,
-                null);
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            String selection = BakesContentProvider.SELECTION_ALL_RECIPE_INGREDIENT;
+            String recipeIdString = String.valueOf(recipeId);
+            String[] selectionArgs = new String[]{recipeIdString};
+
+            return new CursorLoader(RecipeDetailsActivity.this,
+                    ShoppingEntry.CONTENT_URI,
+                    null,
+                    selection,
+                    selectionArgs,
+                    null);
+        }
+
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+            List<Ingredient> ingredientList = BakesDataUtils.getIngredientListFromCursor(cursor);
+            detailsFragment.updateIngredients(ingredientList);
+
+            BakesWidgetUpdateService.startActionUpdateShoppingList(RecipeDetailsActivity.this);
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+
+        }
     }
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        List<Ingredient> ingredientList = BakesDataUtils.getIngredientListFromCursor(cursor);
-        detailsFragment.updateIngredients(ingredientList);
-    }
+    private class RecipeLoaderCallbacks implements LoaderManager.LoaderCallbacks<Cursor> {
+        @Override
+        public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+            String selection = RecipeEntry.COLUMN_NAME_ID + "=? ";
+            String recipeIdString = String.valueOf(recipeId);
+            String[] selectionArgs = new String[]{recipeIdString};
 
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+            return new CursorLoader(RecipeDetailsActivity.this,
+                    RecipeEntry.CONTENT_URI,
+                    null,
+                    selection,
+                    selectionArgs,
+                    null);
+        }
 
+        @Override
+        public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+            recipe = dataUtils.getRecipeDataObjects(cursor).get(0);
+            detailsFragment.setData(recipe);
+        }
+
+        @Override
+        public void onLoaderReset(Loader<Cursor> loader) {
+
+        }
     }
 }

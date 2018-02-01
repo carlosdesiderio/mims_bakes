@@ -18,10 +18,6 @@ import uk.me.desiderio.mimsbakes.view.StringUtils;
 
 public class InternalIngredientListAdapter extends RecyclerView.Adapter<ViewHolder> {
 
-    public interface OnClickIngredientListener {
-        void onIngredientSelected(Ingredient ingredient);
-    }
-
     private List<Ingredient> ingredientList;
     private OnClickIngredientListener listener;
 
@@ -36,7 +32,7 @@ public class InternalIngredientListAdapter extends RecyclerView.Adapter<ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         IngredientViewHolder ingredientViewHolder = (IngredientViewHolder) holder;
         final Ingredient ingredient = ingredientList.get(position);
-        setIngredientBackgroundColor(ingredientViewHolder, ingredient.getShoppingFlag());
+        setIngredientHighlight(ingredientViewHolder, ingredient.getShoppingFlag());
         String ingredientString = StringUtils.getFormatedIngredientString(
                 ingredient.getName(),
                 ingredient.getQuantity(),
@@ -47,7 +43,7 @@ public class InternalIngredientListAdapter extends RecyclerView.Adapter<ViewHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(listener != null) {
+                if (listener != null) {
                     listener.onIngredientSelected(ingredient);
                 }
             }
@@ -58,15 +54,17 @@ public class InternalIngredientListAdapter extends RecyclerView.Adapter<ViewHold
      * set background colour.
      * highlight ingredients that are in the shopping list
      */
-    private void setIngredientBackgroundColor(IngredientViewHolder holder, int isInShoppingList) {
+    private void setIngredientHighlight(IngredientViewHolder holder, int isInShoppingList) {
         int colorRes;
-        if(isInShoppingList == 1) {
-            colorRes = R.color.amber_a400;
+        if (isInShoppingList == 1) {
+            colorRes = R.color.colorPrimaryBright;
+            holder.ingredientDetailBasquetImage.setVisibility(View.VISIBLE);
         } else {
             colorRes = android.R.color.transparent;
+            holder.ingredientDetailBasquetImage.setVisibility(View.INVISIBLE);
         }
 
-        holder.ingredienDetailsTextView.setBackgroundColor(
+        holder.ingredientDetailsContainer.setBackgroundColor(
                 holder.itemView.getResources().getColor(colorRes));
     }
 
@@ -75,23 +73,30 @@ public class InternalIngredientListAdapter extends RecyclerView.Adapter<ViewHold
         return ingredientList.size();
     }
 
-
     public void setClickListener(OnClickIngredientListener listener) {
         this.listener = listener;
     }
 
-    public void swapIngredientList(List<Ingredient> ingredientList){
+    public void swapIngredientList(List<Ingredient> ingredientList) {
         this.ingredientList = ingredientList;
         notifyDataSetChanged();
     }
-    
-    public class IngredientViewHolder extends ViewHolder{
+
+    public interface OnClickIngredientListener {
+        void onIngredientSelected(Ingredient ingredient);
+    }
+
+    public class IngredientViewHolder extends ViewHolder {
         public final TextView ingredienDetailsTextView;
+        public final View ingredientDetailsContainer;
+        public final View ingredientDetailBasquetImage;
 
         public IngredientViewHolder(View itemView) {
             super(itemView);
 
             ingredienDetailsTextView = itemView.findViewById(R.id.ingredient_details_text_view);
+            ingredientDetailsContainer = itemView.findViewById(R.id.ingredient_details_container);
+            ingredientDetailBasquetImage = itemView.findViewById(R.id.ingredient_details_basquet_image_view);
         }
     }
 }

@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -25,13 +26,16 @@ public class RecipeDetailsFragment extends Fragment implements RecipeDetailsAdap
 
     private OnRecipeDetailsFragmentItemClickListener listener;
     private RecipeDetailsAdapter adapter;
+    private TextView titleTextView;
 
     public RecipeDetailsFragment() {
         // Required empty public constructor
     }
 
     public void setData(Recipe recipe) {
+        titleTextView.setText(recipe.getName());
         adapter.swapRecipe(recipe);
+
     }
 
     public void updateIngredients(List<Ingredient> ingredientList) {
@@ -47,6 +51,7 @@ public class RecipeDetailsFragment extends Fragment implements RecipeDetailsAdap
                              Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_recipe_details, container, false);
         RecyclerView recyclerView = rootView.findViewById(R.id.recipe_details_recycler_view);
+        titleTextView = rootView.findViewById(R.id.recipe_details_title_text_view);
 
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);

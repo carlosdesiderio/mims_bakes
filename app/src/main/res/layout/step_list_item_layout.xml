@@ -4,17 +4,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content" >
+
+    <ImageView
+        android:id="@+id/step_list_item_divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/horizontal_divider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/step_thumbnail_image_view"
         android:layout_width="@dimen/step_thumbnail_size"
         android:layout_height="@dimen/step_thumbnail_size"
-        android:layout_marginStart="@dimen/external_list_margin"
-        android:layout_marginTop="@dimen/external_list_margin"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="@dimen/default_external_margin"
+        android:layout_marginTop="@dimen/default_external_margin"
+        android:src="@drawable/step_loading"
+        app:layout_constraintBottom_toBottomOf="@id/step_list_item_divider"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/step_loading" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/step_small_desc_text_view"
@@ -32,10 +42,11 @@
         android:id="@+id/play_icon_image_view"
         android:layout_width="@dimen/step_play_icon_size"
         android:layout_height="@dimen/step_play_icon_size"
-        android:layout_marginEnd="@dimen/external_list_margin"
+        android:layout_marginEnd="@dimen/default_external_margin"
         android:src="@drawable/play"
         android:contentDescription="@string/play_icon_content_description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+
 </android.support.constraint.ConstraintLayout>

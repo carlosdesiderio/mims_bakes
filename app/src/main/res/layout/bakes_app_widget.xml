@@ -1,21 +1,71 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#09C"
+    android:background="@drawable/bakes_widget_bg"
+    android:orientation="vertical"
     android:padding="@dimen/widget_margin">
 
     <TextView
-        android:id="@+id/appwidget_text"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="8dp"
-        android:background="#09C"
-        android:contentDescription="@string/appwidget_text"
-        android:text="@string/appwidget_text"
-        android:textColor="#ffffff"
-        android:textSize="24sp"
-        android:textStyle="bold|italic" />
+        android:layout_marginTop="30dp"
+        android:paddingEnd="@dimen/widget_title_lateral_margin"
+        android:paddingStart="@dimen/widget_title_lateral_margin"
+        android:text="Mim's Shopping List"
+        android:textAlignment="center"
+        android:textAppearance="@style/WidgetTitle" />
 
-</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingEnd="@dimen/widget_list_lateral_margin"
+        android:paddingStart="@dimen/widget_list_lateral_margin">
+
+        <ListView
+            android:id="@+id/widget_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/widget_list_bottom_margin" />
+
+        <LinearLayout
+            android:id="@+id/widget_empty_state_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="8dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/pink_circle"
+                android:padding="4dp"
+                android:src="@drawable/basket" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:contentDescription="@string/widget_empty_text_no_items"
+                android:text="@string/widget_empty_text_no_items"
+                android:textAlignment="center"
+                android:textAppearance="@style/TealBody1" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/widget_empty_text_start_baking"
+                android:text="@string/widget_empty_text_start_baking"
+                android:textAlignment="center"
+                android:textAppearance="@style/WidgetTitle"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

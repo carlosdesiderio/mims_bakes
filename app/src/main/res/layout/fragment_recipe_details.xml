@@ -1,14 +1,25 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/teal_50"
-    tools:context="uk.me.desiderio.mimsbakes.RecipeDetailsFragment"
-    android:paddingBottom="@dimen/external_list_margin"
-    android:paddingTop="@dimen/external_list_margin">
+    android:background="@color/colorBackground"
+    android:orientation="vertical"
+    tools:context="uk.me.desiderio.mimsbakes.RecipeDetailsFragment">
 
+    <TextView
+        android:id="@+id/recipe_details_title_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryLight"
+        android:elevation="2dp"
+        android:paddingBottom="@dimen/default_external_margin"
+        android:paddingEnd="@dimen/horizontal_text_margin"
+        android:paddingStart="@dimen/horizontal_text_margin"
+        android:paddingTop="@dimen/default_external_margin"
+        android:textAppearance="@style/BrownHeadline" />
+    
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recipe_details_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-</FrameLayout>
+</LinearLayout>

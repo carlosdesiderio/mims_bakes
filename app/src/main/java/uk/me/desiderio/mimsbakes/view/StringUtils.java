@@ -5,6 +5,8 @@ package uk.me.desiderio.mimsbakes.view;
  */
 
 public class StringUtils {
+    
+    public static final String UNICODE_BULLET_POINT = "\u2022 ";
     /**
      * returns ingredient string formatted for the details view ingredient list
      * eg: 1.5 tsp salt
@@ -21,7 +23,8 @@ public class StringUtils {
                                                                 float quantity,
                                                                 String meassure) {
 
-        StringBuilder builder = new StringBuilder(name);
+        StringBuilder builder = new StringBuilder(UNICODE_BULLET_POINT);
+        builder.append(name);
         builder.setCharAt(0, Character.toUpperCase(builder.charAt(0)));
         builder.append(" (")
                 .append(getFormattedQuantity(quantity))

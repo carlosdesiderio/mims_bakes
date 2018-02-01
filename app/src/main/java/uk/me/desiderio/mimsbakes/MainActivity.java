@@ -14,22 +14,19 @@ import android.view.View;
 
 import uk.me.desiderio.mimsbakes.data.BakesContract.RecipeEntry;
 import uk.me.desiderio.mimsbakes.data.BakesDataIntentService;
-import uk.me.desiderio.mimsbakes.data.BakesDataUtils;
 import uk.me.desiderio.mimsbakes.data.model.Recipe;
 
-import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.EXTRA_TASK_TYPE;
+import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.EXTRA_DATA_TASK_TYPE;
 import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.TASK_REQUEST_SERVER_DATA;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager
         .LoaderCallbacks<Cursor>, RecipeListAdapter.RecipeClickListener {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
     public static final String EXTRA_RECIPE = "extra_recipe";
+    public static final String EXTRA_RECIPE_ID = "extra_recipe_id";
 
     private static final int LOADER_ID = 150;
 
-    private BakesDataUtils dataUtils;
-    private RecyclerView recipeRecyclerView;
     private View recipeEmptyViewContainter;
 
     private RecipeListAdapter adapter;
@@ -39,9 +36,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dataUtils = new BakesDataUtils(this);
-
-        recipeRecyclerView = findViewById(R.id.recipes_recycler_view);
+        RecyclerView recipeRecyclerView = findViewById(R.id.recipes_recycler_view);
         recipeEmptyViewContainter = findViewById(R.id.recipe_emty_state_container);
 
         int spanCount = getResources().getInteger(R.integer.main_list_column_count);
@@ -56,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
 
         Intent dataIntent = new Intent(this, BakesDataIntentService.class);
-        dataIntent.putExtra(EXTRA_TASK_TYPE, TASK_REQUEST_SERVER_DATA);
+        dataIntent.putExtra(EXTRA_DATA_TASK_TYPE, TASK_REQUEST_SERVER_DATA);
         startService(dataIntent);
     }
 

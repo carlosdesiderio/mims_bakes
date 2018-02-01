@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:baselineAligned="false"
-    android:background="@color/teal_100"
+    android:background="@color/colorBackground"
     tools:context="uk.me.desiderio.mimsbakes.RecipeDetailsActivity">
 
     <fragment

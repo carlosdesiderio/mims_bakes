@@ -18,8 +18,6 @@ import uk.me.desiderio.mimsbakes.data.model.Recipe;
 import uk.me.desiderio.mimsbakes.data.model.Step;
 import uk.me.desiderio.mimsbakes.view.ImageUtils;
 
-import static android.content.ContentValues.TAG;
-
 /**
  * Adapter for the recipe details
  *
@@ -28,6 +26,7 @@ import static android.content.ContentValues.TAG;
  */
 
 public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final String TAG = RecipeDetailsAdapter.class.getSimpleName();
 
     private static final int VIEW_TYPE_INGREDIENT_LIST = 2;
     private static final int VIEW_TYPE_STEP = 4;
@@ -64,13 +63,14 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         int viewType = getItemViewType(position);
-        Log.d(TAG, "onBindViewHolder : vieja: " + viewType + " + " + position);
+        Log.d(TAG, "onBindViewHolder : " + viewType + " + " + position);
 
         switch (viewType) {
             case VIEW_TYPE_INGREDIENT_LIST:
                 List<Ingredient> ingredientList = recipe.getIngredients();
                 IngredientViewHolder ingredientViewHolder = (IngredientViewHolder) holder;
                 ingredientViewHolder.adapter.swapIngredientList(ingredientList);
+                setIngredientHighlight(holder, true);
                 break;
 
             case VIEW_TYPE_STEP:
@@ -90,22 +90,9 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
                         }
                     }
                 });
+                setIngredientHighlight(holder, false);
                 break;
         }
-
-    }
-
-    private void loadStepThumbnail(StepViewHolder holder, String imageUrl) {
-        Context context = holder.itemView.getContext();
-        int defaultImageRes = ImageUtils.getRandomDefaultThumbnailRes(context,
-                R.array.step_thumb_placeholder,
-                R.drawable.step_thumb_default_1);
-
-        ImageUtils.loadImage(context,
-                holder.stepImageView,
-                imageUrl,
-                R.drawable.step_loading,
-                defaultImageRes);
     }
 
     @Override
@@ -137,12 +124,26 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
      * used when adding and removing ingredients to shopping list
      */
     public void updateIngredientList(List<Ingredient> ingredientList) {
-        this.recipe.setIngredients(ingredientList);
-        notifyDataSetChanged();
+        if(this.recipe != null) {
+            this.recipe.setIngredients(ingredientList);
+            notifyDataSetChanged();
+        }
     }
 
     public Recipe getData() {
         return recipe;
+    }
+
+    private void setIngredientHighlight(RecyclerView.ViewHolder holder, boolean hasBackground) {
+        int colorRes;
+        if(hasBackground) {
+            colorRes = R.color.colorBackground;
+        } else {
+            colorRes = R.color.white;
+        }
+
+        holder.itemView.setBackgroundColor(
+                holder.itemView.getResources().getColor(colorRes));
     }
 
     /**
@@ -175,6 +176,16 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 }
             });
         }
+    }
+
+    private void loadStepThumbnail(StepViewHolder holder, String imageUrl) {
+        Context context = holder.itemView.getContext();
+
+        ImageUtils.loadImage(context,
+                holder.stepImageView,
+                imageUrl,
+                R.drawable.step_loading,
+                R.drawable.step_loading);
     }
 
     public class StepViewHolder extends RecyclerView.ViewHolder{

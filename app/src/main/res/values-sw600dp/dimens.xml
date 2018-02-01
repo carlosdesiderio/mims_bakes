@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="horizontal_text_margin">24dp</dimen>
+
+    <dimen name="widget_title_lateral_margin">12dp</dimen>
+    <dimen name="widget_list_lateral_margin">16dp</dimen>
 </resources>

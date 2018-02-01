@@ -18,11 +18,17 @@ import uk.me.desiderio.mimsbakes.data.BakesContract.RecipeEntry;
 import uk.me.desiderio.mimsbakes.data.BakesContract.ShoppingEntry;
 import uk.me.desiderio.mimsbakes.data.BakesContract.StepEntry;
 
+import static uk.me.desiderio.mimsbakes.data.BakesContract.IngredientEntry.COLUMN_RECIPE_FOREING_KEY;
+import static uk.me.desiderio.mimsbakes.data.BakesContract.IngredientEntry.FLAG_NAME_SHOPPING;
+
 /**
  * Content provider to access data from the recipes.db
  */
 // TODO: 24/12/2017 add robelectric test which are in a stash
 public class BakesContentProvider extends ContentProvider {
+
+    public static final String SELECTION_ALL_RECIPE_INGREDIENT = COLUMN_RECIPE_FOREING_KEY + "=?";
+    public static final String SELECTION_SHOPPING_LIST_INGREDIENTS = FLAG_NAME_SHOPPING + "=?";
 
     static final int RECIPES = 100;
     static final int RECIPES_WITH_ID = 101;
@@ -83,17 +89,15 @@ public class BakesContentProvider extends ContentProvider {
             case SHOPPING:
                 // ensures that the default query is not run
                 tableName = null;
-                String smallQuerry = getIngredientJoinQuery();
-                cursor = database.rawQuery(smallQuerry, selectionArgs);
-                Log.d(TAG, "Returning " + cursor.getCount() +
-                        " shop data items from uri match" + match);
+                cursor = executeSelectJoinQuery(selection, selectionArgs);
                 break;
             case STEPS:
                 tableName = StepEntry.TABLE_NAME;
                 break;
             default:
-                throw new UnsupportedOperationException("BakesContentProvider doesn't support " +
-                        "this operariong. Unknown URI : " + uri);
+                throw new UnsupportedOperationException(
+                        "BakesContentProvider doesn't support this operariong. Unknown URI : " +
+                                uri);
         }
 
         if (tableName != null) {
@@ -116,21 +120,50 @@ public class BakesContentProvider extends ContentProvider {
         return cursor;
     }
 
+    private Cursor executeSelectJoinQuery(String selection, String[]
+            selectionArgs) {
+        SQLiteDatabase database = dbHelper.getReadableDatabase();
+        Cursor cursor;
+        String sqlString = getIngredientJoinQuery();
+        String whereKeyWord = " WHERE ";
+
+        switch (selection) {
+            case SELECTION_ALL_RECIPE_INGREDIENT:
+                sqlString += whereKeyWord + selection;
+                break;
+            case SELECTION_SHOPPING_LIST_INGREDIENTS:
+                // shopping flag is set to true
+                sqlString += whereKeyWord +
+                        IngredientEntry.FLAG_NAME_SHOPPING + "=1";
+                selectionArgs = null;
+                break;
+        }
+
+        cursor = database.rawQuery(sqlString, selectionArgs);
+
+        Log.d(TAG, "Returning " + cursor.getCount() +
+                " shop data items from uri match\n" + sqlString +
+                "\n" + selection
+                + "\n" + ((selectionArgs!= null)?selectionArgs[0]:-1));
+
+        return cursor;
+    }
+
     /**
      * returns SQlite query string to query a join table where ingredients have
      * an extea column to determine whether the ingredient is present in the shopping table
      */
     private String getIngredientJoinQuery(){
-        return "SELECT *, CASE " +
+        String sqlString =  "SELECT *, CASE " +
                     "WHEN " + ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME + " IS NULL THEN 0 ELSE 1" +
                     " END " + IngredientEntry.FLAG_NAME_SHOPPING +
                 " FROM " + IngredientEntry.TABLE_NAME +
                 " LEFT OUTER JOIN " + ShoppingEntry.TABLE_NAME +
-                    " ON " + IngredientEntry.COLUMN_RECIPE_FOREING_KEY +
+                    " ON " + COLUMN_RECIPE_FOREING_KEY +
                         " = " + ShoppingEntry.COLUMN_RECIPE_FOREING_KEY +
                     " AND " + IngredientEntry.COLUMN_NAME_INGREDIENT_NAME +
-                        " = " + ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME +
-                " WHERE " + IngredientEntry.COLUMN_RECIPE_FOREING_KEY + "=? ";
+                        " = " + ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME;
+        return sqlString;
     }
 
     @Nullable
@@ -150,7 +183,6 @@ public class BakesContentProvider extends ContentProvider {
             default:
                 throw new UnsupportedOperationException("Unknown Uri: " + uri);
         }
-
 
         if (getContentResolver() != null) {
             getContentResolver().notifyChange(uri, null);
@@ -195,7 +227,7 @@ public class BakesContentProvider extends ContentProvider {
     }
 
     @Nullable
-    public ContentResolver getContentResolver() {
+    private ContentResolver getContentResolver() {
         if (getContext() != null) {
             return getContext().getContentResolver();
         }
@@ -239,7 +271,7 @@ public class BakesContentProvider extends ContentProvider {
         int match = uriMatcher.match(uri);
         final SQLiteDatabase database = dbHelper.getWritableDatabase();
 
-        int returnRows = 0;
+        int returnRows;
         String tableName;
         switch (match) {
             case SHOPPING:
@@ -254,8 +286,6 @@ public class BakesContentProvider extends ContentProvider {
         getContentResolver().notifyChange(uri, null);
 
         return returnRows;
-
-
     }
 
     // not implemented actions

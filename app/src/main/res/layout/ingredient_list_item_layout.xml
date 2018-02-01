@@ -7,16 +7,42 @@
     android:paddingTop="2dp"
     tools:layout_editor_absoluteY="81dp">
 
+    <View
+        android:id="@+id/ingredient_details_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <TextView
         android:id="@+id/ingredient_details_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:paddingStart="8dp"
+        android:paddingBottom="4dp"
         android:paddingEnd="3dp"
-        android:paddingTop="3dp"
-        android:paddingBottom="2dp"
+        android:paddingStart="@dimen/small_external_margin"
+        android:paddingTop="@dimen/small_external_list_margin"
+
+        android:textAppearance="@style/TealBody1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ingredient_details_basquet_image_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ingredient_details_container" />
+
+    <ImageView
+        android:id="@+id/ingredient_details_basquet_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginBottom="@dimen/small_external_list_margin"
+        android:layout_marginEnd="@dimen/small_external_margin"
+        android:layout_marginTop="@dimen/small_external_list_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/basket" />
+
 </android.support.constraint.ConstraintLayout>

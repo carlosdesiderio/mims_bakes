@@ -2,6 +2,7 @@ package uk.me.desiderio.mimsbakes.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -12,9 +13,15 @@ import com.squareup.picasso.Picasso;
  */
 
 public class ImageUtils {
+    private static final String TAG = ImageUtils.class.getSimpleName();
 
-    public static void loadImage(Context context, ImageView view, String imageUrl, int
-            placeholderRes, int defaultImageRes) {
+    public static void loadImage(Context context,
+                                 ImageView view,
+                                 String imageUrl,
+                                 int placeholderRes,
+                                 int defaultImageRes) {
+        Log.d(TAG, " patito :: defaultImageRes " + defaultImageRes +
+                "for  image  " + imageUrl);
 
         if(imageUrl == null || imageUrl.isEmpty()) {
             view.setImageResource(defaultImageRes);
