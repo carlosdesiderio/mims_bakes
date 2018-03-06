@@ -3,6 +3,9 @@ package uk.me.desiderio.mimsbakes;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -15,6 +18,7 @@ import android.view.View;
 import uk.me.desiderio.mimsbakes.data.BakesContract.RecipeEntry;
 import uk.me.desiderio.mimsbakes.data.BakesDataIntentService;
 import uk.me.desiderio.mimsbakes.data.model.Recipe;
+import uk.me.desiderio.mimsbakes.espresso.RecipeIdlingResource;
 
 import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.EXTRA_DATA_TASK_TYPE;
 import static uk.me.desiderio.mimsbakes.data.BakesDataIntentService.TASK_REQUEST_SERVER_DATA;
@@ -30,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager
     private View recipeEmptyViewContainter;
 
     private RecipeListAdapter adapter;
+
+    private RecipeIdlingResource idlingResource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager
 
         recipeRecyclerView.setHasFixedSize(true);
 
+        setIdleResourceState(false);
         getSupportLoaderManager().initLoader(LOADER_ID, null, this);
 
         Intent dataIntent = new Intent(this, BakesDataIntentService.class);
@@ -82,10 +89,32 @@ public class MainActivity extends AppCompatActivity implements LoaderManager
             } else {
                 recipeEmptyViewContainter.setVisibility(View.VISIBLE);
             }
+
+            setIdleResourceState(true);
         }
 
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
             adapter.swapCursor(null);
         }
+
+
+    /**
+     * creates and returns a new {@link RecipeIdlingResource} - only used in tests
+     */
+    @VisibleForTesting
+    @NonNull
+    public RecipeIdlingResource getIdlingResource() {
+        if (idlingResource == null) {
+            idlingResource = new RecipeIdlingResource();
+        }
+        return idlingResource;
+    }
+
+    @VisibleForTesting
+    private void setIdleResourceState(boolean isIdle) {
+        if(idlingResource != null) {
+            idlingResource.setIdleState(isIdle);
+        }
+    }
 }
