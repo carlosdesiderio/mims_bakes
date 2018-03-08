@@ -18,22 +18,17 @@ public class ImageUtils {
 
     public static void loadImage(Context context,
                                  ImageView view,
-                                 String imageUrl,
-                                 int placeholderRes,
+                                 String imageUrlString,
                                  int defaultImageRes) {
-        Log.d(TAG, " patito :: defaultImageRes " + defaultImageRes +
-                "for  image  " + imageUrl);
 
-        if(imageUrl == null || imageUrl.isEmpty()) {
-            view.setImageResource(defaultImageRes);
-        } else {
+        boolean isImageUrlStringMissing = imageUrlString == null || imageUrlString.isEmpty();
 
+        if(!isImageUrlStringMissing) {
             Picasso.with(context)
-                    .load(imageUrl)
-                    .placeholder(placeholderRes)
-                    .error(defaultImageRes)
+                    .load(imageUrlString)
                     .into(view);
-
+        } else if (view.getDrawable() == null) {
+            view.setImageResource(defaultImageRes);
         }
     }
 

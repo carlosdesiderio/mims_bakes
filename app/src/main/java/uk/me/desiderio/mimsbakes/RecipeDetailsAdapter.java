@@ -204,7 +204,6 @@ public class RecipeDetailsAdapter
         ImageUtils.loadImage(context,
                 holder.stepImageView,
                 imageUrl,
-                R.drawable.step_loading,
                 R.drawable.step_loading);
     }
 

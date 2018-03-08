@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,7 +79,6 @@ public class RecipeListAdapter extends
         ImageUtils.loadImage(context,
                 holder.recipeImageView,
                 imageUrl,
-                R.drawable.recipe_image_loading,
                 defaultImageRes);
     }
 

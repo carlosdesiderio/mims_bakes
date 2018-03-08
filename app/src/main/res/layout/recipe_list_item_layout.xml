@@ -18,8 +18,7 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:contentDescription="@string/recipe_image_content_description"
-            android:scaleType="centerCrop"
-            android:src="@drawable/recipe_thumb_default_2" />
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/recipe_item_name_text_view"
