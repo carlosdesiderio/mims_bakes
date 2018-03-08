@@ -23,7 +23,7 @@
     </style>
 
     <style name="WidgetTitle" parent="TextAppearance.AppCompat.Body1">
-        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorFontDark</item>
         <item name="android:textStyle">bold|italic</item>
     </style>
 

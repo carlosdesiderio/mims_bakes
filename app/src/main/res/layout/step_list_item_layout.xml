@@ -12,7 +12,8 @@
         android:layout_height="wrap_content"
         android:src="@drawable/horizontal_divider"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="ContentDescription" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/step_thumbnail_image_view"

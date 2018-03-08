@@ -40,6 +40,7 @@
         android:layout_marginBottom="@dimen/small_external_list_margin"
         android:layout_marginEnd="@dimen/small_external_margin"
         android:layout_marginTop="@dimen/small_external_list_margin"
+        android:contentDescription="@string/content_description_add_ingredient"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

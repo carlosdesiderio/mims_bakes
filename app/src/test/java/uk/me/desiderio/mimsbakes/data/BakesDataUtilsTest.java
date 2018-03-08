@@ -37,7 +37,7 @@ import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
- * Created by desiderio on 25/12/2017.
+ * unit tests for the {@link BakesDataUtils}
  */
 // TODO: 25/12/2017 how to inject content resolver
 @RunWith(RobolectricTestRunner.class)
@@ -136,22 +136,32 @@ public class BakesDataUtilsTest {
     public void whenGettingRecipeDataObjects_thenExpectedDataIsReturn() {
         Cursor recipeCursor = mock(Cursor.class);
 
+        int recipeCount = 2;
         int recipeId = 8;
         String recipeName = "Potato";
         int recipeServings = 12;
         String recipeImageUrl = "http:url";
 
-        when(recipeCursor.getInt(anyInt())).thenReturn(recipeId).thenReturn(recipeServings);
-        when(recipeCursor.getString(anyInt())).thenReturn(recipeName).thenReturn(recipeImageUrl);
-        when(recipeCursor.moveToNext()).thenReturn(true, false);
+        when(recipeCursor.moveToFirst())
+                .thenReturn(true);
+        when(recipeCursor.moveToNext())
+                .thenReturn(true, false);
+        when(recipeCursor.getInt(anyInt()))
+                .thenReturn(recipeId).thenReturn(recipeServings);
+        when(recipeCursor.getString(anyInt()))
+                .thenReturn(recipeName).thenReturn(recipeImageUrl);
 
         doNothing().when(dataUtils).addIngredients(Matchers.<Recipe>any());
         doNothing().when(dataUtils).addSteps(Matchers.<Recipe>any());
 
-        List<Recipe> actualRecipeList = dataUtils.getRecipeDataObjects(recipeCursor);
+        List<Recipe> actualRecipeList =
+                dataUtils.getRecipeDataObjects(recipeCursor);
 
-        verify(dataUtils, times(1)).addIngredients(Matchers.<Recipe>any());
-        verify(dataUtils, times(1)).addSteps(Matchers.<Recipe>any());
+        verify(dataUtils, times(recipeCount))
+                .addIngredients(Matchers.<Recipe>any());
+        verify(dataUtils, times(recipeCount))
+                .addSteps(Matchers.<Recipe>any());
+
         Recipe actualRecipe = actualRecipeList.get(0);
 
         assertThat(actualRecipe.getRecipeId(), is(recipeId));
@@ -174,9 +184,12 @@ public class BakesDataUtilsTest {
         float quantity = 100f;
         String meassure = "grams";
 
-        when(ingredientCursor.getString(anyInt())).thenReturn(name).thenReturn(meassure);
-        when(ingredientCursor.getFloat(anyInt())).thenReturn(quantity);
-        when(ingredientCursor.moveToNext()).thenReturn(true, false);
+        when(ingredientCursor.getString(anyInt()))
+                .thenReturn(name).thenReturn(meassure);
+        when(ingredientCursor.getFloat(anyInt()))
+                .thenReturn(quantity);
+        when(ingredientCursor.moveToNext())
+                .thenReturn(true, false);
 
         when(contentResolver.query(eq(IngredientEntry.CONTENT_URI),
                 Matchers.<String[]>any(),
@@ -215,7 +228,8 @@ public class BakesDataUtilsTest {
                 .thenReturn(description)
                 .thenReturn(videoURL)
                 .thenReturn(thumbnailURL);
-        when(ingredientCursor.moveToNext()).thenReturn(true, false);
+        when(ingredientCursor.moveToNext()).thenReturn(true,
+                                                       false);
 
         when(contentResolver.query(eq(StepEntry.CONTENT_URI),
                 Matchers.<String[]>any(),
@@ -239,7 +253,8 @@ public class BakesDataUtilsTest {
         dataUtils.persistRecipes(recipeList);
         int recipeId = recipe.getRecipeId();
 
-        // get recipe ContentValues and insert them in the database per all recipes
+        // get recipe ContentValues and insert them in the database for all
+        // recipes
         verify(recipe, times(RECIPE_MOCK_COUNT)).toContentValues();
         verify(contentResolver, times(RECIPE_MOCK_COUNT))
                 .insert(Matchers.<Uri>any(), Matchers.<ContentValues>any());
@@ -251,7 +266,9 @@ public class BakesDataUtilsTest {
 
         // delegate step insertion to repective methods per all recipes
         verify(recipe, times(RECIPE_MOCK_COUNT)).getSteps();
-        verify(dataUtils, times(RECIPE_MOCK_COUNT)).persistSteps(recipe.getSteps(), recipeId);
+        verify(dataUtils,
+               times(RECIPE_MOCK_COUNT)).persistSteps(recipe.getSteps(),
+                                                      recipeId);
 
 
     }
@@ -285,11 +302,4 @@ public class BakesDataUtilsTest {
         verify(contentResolver, times(1))
                 .bulkInsert(eq(StepEntry.CONTENT_URI), Matchers.<ContentValues[]>any());
     }
-
-
-    @Test
-    public void test() {
-
-    }
-
 }

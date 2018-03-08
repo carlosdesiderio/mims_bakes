@@ -59,8 +59,8 @@ public class BakesDBHelper extends SQLiteOpenHelper {
                 RecipeEntry.TABLE_NAME + " (" + RecipeEntry.COLUMN_NAME_ID + ")" +
                 "ON UPDATE CASCADE ON DELETE CASCADE" +
                 " UNIQUE (" +
-                    ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME + "," +
-                    ShoppingEntry.COLUMN_RECIPE_FOREING_KEY + ") ON CONFLICT REPLACE);";
+                ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME + "," +
+                ShoppingEntry.COLUMN_RECIPE_FOREING_KEY + ") ON CONFLICT REPLACE);";
 
         final String SQL_CREATE_STEPS_TABLE = "CREATE TABLE " + StepEntry.TABLE_NAME +
                 " (" +

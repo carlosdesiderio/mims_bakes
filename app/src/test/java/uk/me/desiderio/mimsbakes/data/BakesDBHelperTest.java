@@ -36,7 +36,9 @@ import static uk.me.desiderio.mimsbakes.data.BakesMockDataUtils.getMockSteps;
 import static uk.me.desiderio.mimsbakes.data.DatabaseSchemaTestHelper.DB_ROW_TYPE_INTEGER;
 import static uk.me.desiderio.mimsbakes.data.DatabaseSchemaTestHelper.DB_ROW_TYPE_REAL;
 import static uk.me.desiderio.mimsbakes.data.DatabaseSchemaTestHelper.DB_ROW_TYPE_TEXT;
+import static uk.me.desiderio.mimsbakes.data.DatabaseSchemaTestHelper.doesTableExist;
 import static uk.me.desiderio.mimsbakes.data.DatabaseSchemaTestHelper.getColumnDetailsOrNull;
+import static uk.me.desiderio.mimsbakes.data.DatabaseSchemaTestHelper.listColumnNames;
 
 /**
  * provides test for {@link BakesDBHelper}
@@ -62,14 +64,14 @@ public class BakesDBHelperTest {
 
     @Test
     public void whenCreated_databaseHasAllTables() {
-        assertTrue(DatabaseSchemaTestHelper.doesTableExist(database, RecipeEntry.TABLE_NAME));
-        assertTrue(DatabaseSchemaTestHelper.doesTableExist(database, IngredientEntry.TABLE_NAME));
-        assertTrue(DatabaseSchemaTestHelper.doesTableExist(database, StepEntry.TABLE_NAME));
+        assertTrue(doesTableExist(database, RecipeEntry.TABLE_NAME));
+        assertTrue(doesTableExist(database, IngredientEntry.TABLE_NAME));
+        assertTrue(doesTableExist(database, StepEntry.TABLE_NAME));
     }
 
     @Test
     public void whenDBCreated_recipeTableHasRightFormat() {
-        List<String> columnNames = DatabaseSchemaTestHelper.listColumnNames(database, RecipeEntry
+        List<String> columnNames = listColumnNames(database, RecipeEntry
                 .TABLE_NAME);
         assertThat(columnNames).containsExactly(
                 RecipeEntry._ID,
@@ -79,33 +81,43 @@ public class BakesDBHelperTest {
                 RecipeEntry.COLUMN_NAME_SERVINGS);
 
         TableDescription rowIdDescription =
-                getColumnDetailsOrNull(database, RecipeEntry.TABLE_NAME, RecipeEntry._ID);
+                getColumnDetailsOrNull(database,
+                                       RecipeEntry.TABLE_NAME,
+                                       RecipeEntry._ID);
         assertEquals(RecipeEntry._ID, rowIdDescription.name);
         assertEquals(DB_ROW_TYPE_INTEGER, rowIdDescription.type);
         assertFalse(rowIdDescription.isNotNull);
         assertTrue(rowIdDescription.isPk);
 
         TableDescription recipeIdDescription =
-                getColumnDetailsOrNull(database, RecipeEntry.TABLE_NAME, RecipeEntry.COLUMN_NAME_ID);
+                getColumnDetailsOrNull(database,
+                                       RecipeEntry.TABLE_NAME,
+                                       RecipeEntry.COLUMN_NAME_ID);
         assertEquals(RecipeEntry.COLUMN_NAME_ID, recipeIdDescription.name);
         assertEquals(DB_ROW_TYPE_INTEGER, recipeIdDescription.type);
         assertTrue(recipeIdDescription.isNotNull);
 
         TableDescription nameDescription =
-                getColumnDetailsOrNull(database, RecipeEntry.TABLE_NAME, RecipeEntry.COLUMN_NAME_NAME);
+                getColumnDetailsOrNull(database,
+                                       RecipeEntry.TABLE_NAME,
+                                       RecipeEntry.COLUMN_NAME_NAME);
         assertEquals(RecipeEntry.COLUMN_NAME_NAME, nameDescription.name);
         assertEquals(DB_ROW_TYPE_TEXT, nameDescription.type);
         assertTrue(nameDescription.isNotNull);
 
 
         TableDescription imageDescription =
-                getColumnDetailsOrNull(database, RecipeEntry.TABLE_NAME, RecipeEntry.COLUMN_NAME_IMAGE);
+                getColumnDetailsOrNull(database,
+                                       RecipeEntry.TABLE_NAME,
+                                       RecipeEntry.COLUMN_NAME_IMAGE);
         assertEquals(RecipeEntry.COLUMN_NAME_IMAGE, imageDescription.name);
         assertEquals(DB_ROW_TYPE_TEXT, imageDescription.type);
         assertTrue(imageDescription.isNotNull);
 
         TableDescription stepsDescription =
-                getColumnDetailsOrNull(database, RecipeEntry.TABLE_NAME, RecipeEntry.COLUMN_NAME_SERVINGS);
+                getColumnDetailsOrNull(database,
+                                       RecipeEntry.TABLE_NAME,
+                                       RecipeEntry.COLUMN_NAME_SERVINGS);
         assertEquals(RecipeEntry.COLUMN_NAME_SERVINGS, stepsDescription.name);
         assertEquals(DB_ROW_TYPE_INTEGER, stepsDescription.type);
         assertTrue(stepsDescription.isNotNull);
@@ -113,7 +125,7 @@ public class BakesDBHelperTest {
 
     @Test
     public void whenDBCreated_ingredientsTableHasRightFormat() {
-        List<String> columnNames = DatabaseSchemaTestHelper.listColumnNames(database, IngredientEntry
+        List<String> columnNames = listColumnNames(database, IngredientEntry
                 .TABLE_NAME);
         assertThat(columnNames).containsExactly(
                 IngredientEntry._ID,
@@ -123,42 +135,56 @@ public class BakesDBHelperTest {
                 IngredientEntry.COLUMN_RECIPE_FOREING_KEY);
 
         TableDescription rowIdDescription =
-                getColumnDetailsOrNull(database, IngredientEntry.TABLE_NAME, IngredientEntry._ID);
+                getColumnDetailsOrNull(database,
+                                       IngredientEntry.TABLE_NAME,
+                                       IngredientEntry._ID);
         assertEquals(IngredientEntry._ID, rowIdDescription.name);
         assertEquals(DB_ROW_TYPE_INTEGER, rowIdDescription.type);
         assertFalse(rowIdDescription.isNotNull);
         assertTrue(rowIdDescription.isPk);
 
         TableDescription nameDescription =
-                getColumnDetailsOrNull(database, IngredientEntry.TABLE_NAME, IngredientEntry.COLUMN_NAME_INGREDIENT_NAME);
-        assertEquals(IngredientEntry.COLUMN_NAME_INGREDIENT_NAME, nameDescription.name);
+                getColumnDetailsOrNull(database,
+                                       IngredientEntry.TABLE_NAME,
+                                       IngredientEntry.COLUMN_NAME_INGREDIENT_NAME);
+        assertEquals(IngredientEntry.COLUMN_NAME_INGREDIENT_NAME,
+                     nameDescription.name);
         assertEquals(DB_ROW_TYPE_TEXT, nameDescription.type);
         assertTrue(nameDescription.isNotNull);
 
         TableDescription quantityDescription =
-                getColumnDetailsOrNull(database, IngredientEntry.TABLE_NAME, IngredientEntry.COLUMN_NAME_INGREDIENT_QUANTITY);
-        assertEquals(IngredientEntry.COLUMN_NAME_INGREDIENT_QUANTITY, quantityDescription.name);
+                getColumnDetailsOrNull(database,
+                                       IngredientEntry.TABLE_NAME,
+                                       IngredientEntry.COLUMN_NAME_INGREDIENT_QUANTITY);
+        assertEquals(IngredientEntry.COLUMN_NAME_INGREDIENT_QUANTITY,
+                     quantityDescription.name);
         assertEquals(DB_ROW_TYPE_REAL, quantityDescription.type);
         assertTrue(quantityDescription.isNotNull);
 
 
         TableDescription measureDescription =
-                getColumnDetailsOrNull(database, IngredientEntry.TABLE_NAME, IngredientEntry.COLUMN_NAME_INGREDIENT_MEASURE);
-        assertEquals(IngredientEntry.COLUMN_NAME_INGREDIENT_MEASURE, measureDescription.name);
+                getColumnDetailsOrNull(database,
+                                       IngredientEntry.TABLE_NAME,
+                                       IngredientEntry.COLUMN_NAME_INGREDIENT_MEASURE);
+        assertEquals(IngredientEntry.COLUMN_NAME_INGREDIENT_MEASURE,
+                     measureDescription.name);
         assertEquals(DB_ROW_TYPE_TEXT, measureDescription.type);
         assertTrue(measureDescription.isNotNull);
 
 
         TableDescription foreignKeyDescription =
-                getColumnDetailsOrNull(database, IngredientEntry.TABLE_NAME, IngredientEntry.COLUMN_RECIPE_FOREING_KEY);
-        assertEquals(IngredientEntry.COLUMN_RECIPE_FOREING_KEY, foreignKeyDescription.name);
+                getColumnDetailsOrNull(database,
+                                       IngredientEntry.TABLE_NAME,
+                                       IngredientEntry.COLUMN_RECIPE_FOREING_KEY);
+        assertEquals(IngredientEntry.COLUMN_RECIPE_FOREING_KEY,
+                     foreignKeyDescription.name);
         assertEquals(DB_ROW_TYPE_INTEGER, foreignKeyDescription.type);
         assertTrue(foreignKeyDescription.isNotNull);
     }
 
     @Test
     public void whenDBCreated_shoppingTableHasRightFormat() {
-        List<String> columnNames = DatabaseSchemaTestHelper.listColumnNames(database, ShoppingEntry
+        List<String> columnNames = listColumnNames(database, ShoppingEntry
                 .TABLE_NAME);
         assertThat(columnNames).containsExactly(
                 ShoppingEntry._ID,
@@ -166,29 +192,38 @@ public class BakesDBHelperTest {
                 ShoppingEntry.COLUMN_RECIPE_FOREING_KEY);
 
         TableDescription rowIdDescription =
-                getColumnDetailsOrNull(database, ShoppingEntry.TABLE_NAME, ShoppingEntry._ID);
+                getColumnDetailsOrNull(database,
+                                       ShoppingEntry.TABLE_NAME,
+                                       ShoppingEntry._ID);
         assertEquals(ShoppingEntry._ID, rowIdDescription.name);
         assertEquals(DB_ROW_TYPE_INTEGER, rowIdDescription.type);
         assertFalse(rowIdDescription.isNotNull);
         assertTrue(rowIdDescription.isPk);
 
         TableDescription nameDescription =
-                getColumnDetailsOrNull(database, ShoppingEntry.TABLE_NAME, ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME);
-        assertEquals(ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME, nameDescription.name);
+                getColumnDetailsOrNull(database,
+                                       ShoppingEntry.TABLE_NAME,
+                                       ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME);
+        assertEquals(ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME,
+                     nameDescription.name);
         assertEquals(DB_ROW_TYPE_TEXT, nameDescription.type);
         assertTrue(nameDescription.isNotNull);
 
 
         TableDescription foreignKeyDescription =
-                getColumnDetailsOrNull(database, ShoppingEntry.TABLE_NAME, ShoppingEntry.COLUMN_RECIPE_FOREING_KEY);
-        assertEquals(ShoppingEntry.COLUMN_RECIPE_FOREING_KEY, foreignKeyDescription.name);
+                getColumnDetailsOrNull(database,
+                                       ShoppingEntry.TABLE_NAME,
+                                       ShoppingEntry.COLUMN_RECIPE_FOREING_KEY);
+        assertEquals(ShoppingEntry.COLUMN_RECIPE_FOREING_KEY,
+                     foreignKeyDescription.name);
         assertEquals(DB_ROW_TYPE_INTEGER, foreignKeyDescription.type);
         assertTrue(foreignKeyDescription.isNotNull);
     }
 
     @Test
     public void whenDBCreated_stepsTableHasRightFormat() {
-        List<String> columnNames = DatabaseSchemaTestHelper.listColumnNames(database, StepEntry.TABLE_NAME);
+        List<String> columnNames = listColumnNames(database,
+                                                   StepEntry.TABLE_NAME);
         assertThat(columnNames).containsExactly(
                 StepEntry._ID,
                 StepEntry.COLUMN_NAME_STEP_ID,
@@ -199,56 +234,72 @@ public class BakesDBHelperTest {
                 StepEntry.COLUMN_RECIPE_FOREING_KEY);
 
         TableDescription rowIdDescription =
-                getColumnDetailsOrNull(database, StepEntry.TABLE_NAME, StepEntry._ID);
+                getColumnDetailsOrNull(database,
+                                       StepEntry.TABLE_NAME,
+                                       StepEntry._ID);
         assertEquals(StepEntry._ID, rowIdDescription.name);
         assertEquals(DB_ROW_TYPE_INTEGER, rowIdDescription.type);
         assertFalse(rowIdDescription.isNotNull);
         assertTrue(rowIdDescription.isPk);
 
         TableDescription stepIdDescription =
-                getColumnDetailsOrNull(database, StepEntry.TABLE_NAME, StepEntry.COLUMN_NAME_STEP_ID);
+                getColumnDetailsOrNull(database,
+                                       StepEntry.TABLE_NAME,
+                                       StepEntry.COLUMN_NAME_STEP_ID);
         assertEquals(StepEntry.COLUMN_NAME_STEP_ID, stepIdDescription.name);
         assertEquals(DB_ROW_TYPE_INTEGER, stepIdDescription.type);
         assertTrue(stepIdDescription.isNotNull);
 
 
         TableDescription shortDescDescription =
-                getColumnDetailsOrNull(database, StepEntry.TABLE_NAME, StepEntry.COLUMN_NAME_STEP_SHORT_DESC);
+                getColumnDetailsOrNull(database,
+                                       StepEntry.TABLE_NAME,
+                                       StepEntry.COLUMN_NAME_STEP_SHORT_DESC);
         assertEquals(StepEntry.COLUMN_NAME_STEP_SHORT_DESC, shortDescDescription.name);
         assertEquals(DB_ROW_TYPE_TEXT, shortDescDescription.type);
         assertTrue(shortDescDescription.isNotNull);
 
 
         TableDescription longDescDescription =
-                getColumnDetailsOrNull(database, StepEntry.TABLE_NAME, StepEntry.COLUMN_NAME_STEP_DESC);
+                getColumnDetailsOrNull(database,
+                                       StepEntry.TABLE_NAME,
+                                       StepEntry.COLUMN_NAME_STEP_DESC);
         assertEquals(StepEntry.COLUMN_NAME_STEP_DESC, longDescDescription.name);
         assertEquals(DB_ROW_TYPE_TEXT, longDescDescription.type);
         assertTrue(longDescDescription.isNotNull);
 
 
         TableDescription thumbnailURLDescription =
-                getColumnDetailsOrNull(database, StepEntry.TABLE_NAME, StepEntry.COLUMN_NAME_STEP_THUMBNAIL_URL);
+                getColumnDetailsOrNull(database,
+                                       StepEntry.TABLE_NAME,
+                                       StepEntry.COLUMN_NAME_STEP_THUMBNAIL_URL);
         assertEquals(StepEntry.COLUMN_NAME_STEP_THUMBNAIL_URL, thumbnailURLDescription.name);
         assertEquals(DB_ROW_TYPE_TEXT, thumbnailURLDescription.type);
         assertTrue(thumbnailURLDescription.isNotNull);
 
 
         TableDescription videoURLDescription =
-                getColumnDetailsOrNull(database, StepEntry.TABLE_NAME, StepEntry.COLUMN_NAME_STEP_SHORT_DESC);
+                getColumnDetailsOrNull(database,
+                                       StepEntry.TABLE_NAME,
+                                       StepEntry.COLUMN_NAME_STEP_SHORT_DESC);
         assertEquals(StepEntry.COLUMN_NAME_STEP_SHORT_DESC, videoURLDescription.name);
         assertEquals(DB_ROW_TYPE_TEXT, videoURLDescription.type);
         assertTrue(videoURLDescription.isNotNull);
 
 
         TableDescription nameDescription =
-                getColumnDetailsOrNull(database, StepEntry.TABLE_NAME, StepEntry.COLUMN_NAME_STEP_VIDEO_URL);
+                getColumnDetailsOrNull(database,
+                                       StepEntry.TABLE_NAME,
+                                       StepEntry.COLUMN_NAME_STEP_VIDEO_URL);
         assertEquals(StepEntry.COLUMN_NAME_STEP_VIDEO_URL, nameDescription.name);
         assertEquals(DB_ROW_TYPE_TEXT, nameDescription.type);
         assertTrue(nameDescription.isNotNull);
 
 
         TableDescription foreignKeyDescription =
-                getColumnDetailsOrNull(database, StepEntry.TABLE_NAME, StepEntry.COLUMN_RECIPE_FOREING_KEY);
+                getColumnDetailsOrNull(database,
+                                       StepEntry.TABLE_NAME,
+                                       StepEntry.COLUMN_RECIPE_FOREING_KEY);
         assertEquals(StepEntry.COLUMN_RECIPE_FOREING_KEY, foreignKeyDescription.name);
         assertEquals(DB_ROW_TYPE_INTEGER, foreignKeyDescription.type);
         assertTrue(foreignKeyDescription.isNotNull);
@@ -257,7 +308,9 @@ public class BakesDBHelperTest {
     @Test
     public void whenInsertingRecipe_thenRecipeCanBeQueried() {
         int expectedRecipeId = 2;
-        database.insert(RecipeEntry.TABLE_NAME, null, getMockRecipe(expectedRecipeId));
+        database.insert(RecipeEntry.TABLE_NAME,
+                        null,
+                        getMockRecipe(expectedRecipeId));
 
         Cursor cursor = database.query(RecipeEntry.TABLE_NAME,
                 null,
@@ -270,11 +323,16 @@ public class BakesDBHelperTest {
         assertNotNull(cursor);
         assertEquals(1, cursor.getCount());
         cursor.moveToFirst();
-        int rowId = cursor.getInt(cursor.getColumnIndex(RecipeEntry._ID));
-        int recipeId = cursor.getInt(cursor.getColumnIndex(RecipeEntry.COLUMN_NAME_ID));
-        String name = cursor.getString(cursor.getColumnIndex(RecipeEntry.COLUMN_NAME_NAME));
-        String imageUrl = cursor.getString(cursor.getColumnIndex(RecipeEntry.COLUMN_NAME_IMAGE));
-        int servings = cursor.getInt(cursor.getColumnIndex(RecipeEntry.COLUMN_NAME_SERVINGS));
+        int rowId = cursor.getInt(
+                cursor.getColumnIndex(RecipeEntry._ID));
+        int recipeId = cursor.getInt(
+                cursor.getColumnIndex(RecipeEntry.COLUMN_NAME_ID));
+        String name = cursor.getString(
+                cursor.getColumnIndex(RecipeEntry.COLUMN_NAME_NAME));
+        String imageUrl = cursor.getString(
+                cursor.getColumnIndex(RecipeEntry.COLUMN_NAME_IMAGE));
+        int servings = cursor.getInt(
+                cursor.getColumnIndex(RecipeEntry.COLUMN_NAME_SERVINGS));
 
         assertEquals(1, rowId);
         assertEquals(expectedRecipeId, recipeId);
@@ -286,8 +344,12 @@ public class BakesDBHelperTest {
     @Test
     public void whenInsertingRecipeTwice_thenUniqueConstraintIsEnforced() {
         int expectedRecipeId = 2;
-        database.insert(RecipeEntry.TABLE_NAME, null, getMockRecipe(expectedRecipeId));
-        database.insert(RecipeEntry.TABLE_NAME, null, getMockRecipe(expectedRecipeId));
+        database.insert(RecipeEntry.TABLE_NAME,
+                        null,
+                        getMockRecipe(expectedRecipeId));
+        database.insert(RecipeEntry.TABLE_NAME,
+                        null,
+                        getMockRecipe(expectedRecipeId));
 
         Cursor cursor = database.query(RecipeEntry.TABLE_NAME,
                 null,
@@ -308,17 +370,25 @@ public class BakesDBHelperTest {
         int otherRecipeId = 9;
         int ingredientCount = 9;
 
-        database.insert(RecipeEntry.TABLE_NAME, null, getMockRecipe(recipeId));
+        database.insert(RecipeEntry.TABLE_NAME,
+                        null,
+                        getMockRecipe(recipeId));
 
 
         // insert ingredients of two different recipes
-        List<ContentValues> ingredientList = getMockIngredients(ingredientCount, recipeId);
-        List<ContentValues> otherRecipeIngredientList = getMockIngredients(ingredientCount,
-                otherRecipeId);
+        List<ContentValues> ingredientList =
+                getMockIngredients(ingredientCount, recipeId);
+        List<ContentValues> otherRecipeIngredientList =
+                getMockIngredients(ingredientCount, otherRecipeId);
 
         for (int i = 0; i < ingredientList.size(); i++) {
-            float insertId = database.insert(IngredientEntry.TABLE_NAME, null, ingredientList.get(i));
-            float otherInsertId = database.insert(IngredientEntry.TABLE_NAME, null, otherRecipeIngredientList
+            float insertId = database.insert(IngredientEntry.TABLE_NAME,
+                                             null,
+
+                                             ingredientList.get(i));
+            float otherInsertId = database.insert(IngredientEntry.TABLE_NAME,
+                                                  null,
+                                                  otherRecipeIngredientList
                     .get(i));
             assertThat(insertId).isNotNegative();
             assertThat(otherInsertId).isNotNegative();
@@ -336,8 +406,8 @@ public class BakesDBHelperTest {
         assertNotNull(recipeCursor);
         assertEquals(1, recipeCursor.getCount());
         recipeCursor.moveToFirst();
-        int actualRecipeId = recipeCursor.getInt(recipeCursor.getColumnIndex(RecipeEntry
-                .COLUMN_NAME_ID));
+        int actualRecipeId = recipeCursor.getInt(
+                recipeCursor.getColumnIndex(RecipeEntry.COLUMN_NAME_ID));
 
         // get only ingredient of the actual recipe
         String selection = IngredientEntry.COLUMN_RECIPE_FOREING_KEY + " =? ";
@@ -362,13 +432,18 @@ public class BakesDBHelperTest {
         int recipeId = 6;
         int ingredientCount = 9;
 
-        database.insert(RecipeEntry.TABLE_NAME, null, getMockRecipe(recipeId));
+        database.insert(RecipeEntry.TABLE_NAME,
+                        null,
+                        getMockRecipe(recipeId));
 
         // insert ingredients of two different recipes
-        List<ContentValues> ingredientList = getMockIngredients(ingredientCount, recipeId);
+        List<ContentValues> ingredientList = getMockIngredients(ingredientCount,
+                                                                recipeId);
 
         for (int i = 0; i < ingredientList.size(); i++) {
-            float insertId = database.insert(IngredientEntry.TABLE_NAME, null, ingredientList.get(i));
+            float insertId = database.insert(IngredientEntry.TABLE_NAME,
+                                             null,
+                                             ingredientList.get(i));
             assertThat(insertId).isNotNegative();
         }
         Cursor ingredientCursor = database.query(IngredientEntry.TABLE_NAME,
@@ -392,26 +467,31 @@ public class BakesDBHelperTest {
                         (IngredientEntry.COLUMN_RECIPE_FOREING_KEY));
 
         ContentValues shoppingValues = new ContentValues();
-        shoppingValues.put(ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME, expectedIngredientName);
-        shoppingValues.put(ShoppingEntry.COLUMN_RECIPE_FOREING_KEY, ingredientRecipeId);
+        shoppingValues.put(ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME,
+                           expectedIngredientName);
+        shoppingValues.put(ShoppingEntry.COLUMN_RECIPE_FOREING_KEY,
+                           ingredientRecipeId);
 
-        float shoppingInsertId = database.insert(ShoppingEntry.TABLE_NAME, null, shoppingValues);
+        float shoppingInsertId = database.insert(ShoppingEntry.TABLE_NAME,
+                                                 null,
+                                                 shoppingValues);
         assertThat(shoppingInsertId).isNotNegative();
 
         String[] projection = new String[]{IngredientEntry.COLUMN_NAME_INGREDIENT_NAME,
                 IngredientEntry.COLUMN_NAME_INGREDIENT_QUANTITY,
                 IngredientEntry.COLUMN_NAME_INGREDIENT_MEASURE};
         String shoppingSelection =
-                IngredientEntry.COLUMN_RECIPE_FOREING_KEY + " = " + ShoppingEntry.COLUMN_RECIPE_FOREING_KEY +
+                IngredientEntry.COLUMN_RECIPE_FOREING_KEY + " = " +
+                        ShoppingEntry.COLUMN_RECIPE_FOREING_KEY +
                         " AND " +
-                IngredientEntry.COLUMN_NAME_INGREDIENT_NAME + " = " + ShoppingEntry
-                        .COLUMN_NAME_INGREDIENT_NAME;
+                        IngredientEntry.COLUMN_NAME_INGREDIENT_NAME + " = " +
+                        ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME;
 
         Cursor shoppingCursor = database.query(
                 IngredientEntry.TABLE_NAME + " , " + ShoppingEntry.TABLE_NAME,
                 projection,
                 shoppingSelection,
-                                null,
+                  null,
                 null,
                 null,
                 null
@@ -421,7 +501,8 @@ public class BakesDBHelperTest {
         String shoppingIngredientName = shoppingCursor.getString(shoppingCursor
                 .getColumnIndex(IngredientEntry.COLUMN_NAME_INGREDIENT_NAME));
         float shoppingIngredientQuantity = shoppingCursor.getFloat(
-                shoppingCursor.getColumnIndex(IngredientEntry.COLUMN_NAME_INGREDIENT_QUANTITY));
+                shoppingCursor.getColumnIndex(
+                        IngredientEntry.COLUMN_NAME_INGREDIENT_QUANTITY));
         assertEquals(1, shoppingCursor.getCount());
         assertEquals(expectedIngredientName, shoppingIngredientName);
         assertEquals(expectedIngredientQuantity, shoppingIngredientQuantity);
@@ -435,15 +516,23 @@ public class BakesDBHelperTest {
         int unrelatedRecipeId = 9;
         int ingredientCount = 9;
 
-        database.insert(RecipeEntry.TABLE_NAME, null, getMockRecipe(recipeId));
+        database.insert(RecipeEntry.TABLE_NAME,
+                        null,
+                        getMockRecipe(recipeId));
 
         // insert steps of two different recipes
-        List<ContentValues> stepsList = getMockSteps(ingredientCount, recipeId);
-        List<ContentValues> otherStepList = getMockSteps(ingredientCount, unrelatedRecipeId);
+        List<ContentValues> stepsList = getMockSteps(ingredientCount,
+                                                     recipeId);
+        List<ContentValues> otherStepList = getMockSteps(ingredientCount,
+                                                         unrelatedRecipeId);
 
         for (int i = 0; i < stepsList.size(); i++) {
-            long insertId = database.insert(StepEntry.TABLE_NAME, null, stepsList.get(i));
-            long otherInsertId = database.insert(StepEntry.TABLE_NAME, null, otherStepList.get(i));
+            long insertId = database.insert(StepEntry.TABLE_NAME,
+                                            null,
+                                            stepsList.get(i));
+            long otherInsertId = database.insert(StepEntry.TABLE_NAME,
+                                                 null,
+                                                 otherStepList.get(i));
             assertThat(insertId).isNotNegative();
             assertThat(otherInsertId).isNotNegative();
         }
@@ -459,7 +548,8 @@ public class BakesDBHelperTest {
         assertNotNull(recipeCursor);
         assertEquals(1, recipeCursor.getCount());
         recipeCursor.moveToFirst();
-        int actualRecipeId = recipeCursor.getInt(recipeCursor.getColumnIndex(RecipeEntry
+        int actualRecipeId =
+                recipeCursor.getInt(recipeCursor.getColumnIndex(RecipeEntry
                 .COLUMN_NAME_ID));
 
         // get only steps of the actual recipe
@@ -485,14 +575,20 @@ public class BakesDBHelperTest {
 
         int randomForeingKey = 999;
         int newQuantity = 5;
-        ContentValues oldValues = getMockIngredientContentValues(1, randomForeingKey);
+        ContentValues oldValues =
+                getMockIngredientContentValues(1, randomForeingKey);
 
         // same unique contraint values, different quantity
-        ContentValues newValues = getMockIngredientContentValues(1, randomForeingKey);
-        newValues.put(IngredientEntry.COLUMN_NAME_INGREDIENT_QUANTITY, newQuantity);
+        ContentValues newValues =
+                getMockIngredientContentValues(1, randomForeingKey);
+        newValues.put(IngredientEntry.COLUMN_NAME_INGREDIENT_QUANTITY,
+                      newQuantity);
 
-        database.insert(IngredientEntry.TABLE_NAME, null, oldValues);
-        database.insert(IngredientEntry.TABLE_NAME, null, newValues);
+        database.insert(IngredientEntry.TABLE_NAME,
+                        null, oldValues);
+        database.insert(IngredientEntry.TABLE_NAME,
+                        null,
+                        newValues);
 
         Cursor cursor = database.query(IngredientEntry.TABLE_NAME,
                 null,
@@ -516,14 +612,21 @@ public class BakesDBHelperTest {
 
         int randomForeingKey = 999;
         String newShortDesc = "shorter description";
-        ContentValues oldValues = getMockStepContentValues(1, randomForeingKey);
+        ContentValues oldValues = getMockStepContentValues(1,
+                                                           randomForeingKey);
 
         // same unique contraint values, different quantity
-        ContentValues newValues = getMockStepContentValues(1, randomForeingKey);
-        newValues.put(StepEntry.COLUMN_NAME_STEP_SHORT_DESC, newShortDesc);
+        ContentValues newValues = getMockStepContentValues(1,
+                                                           randomForeingKey);
+        newValues.put(StepEntry.COLUMN_NAME_STEP_SHORT_DESC,
+                      newShortDesc);
 
-        database.insert(StepEntry.TABLE_NAME, null, oldValues);
-        database.insert(StepEntry.TABLE_NAME, null, newValues);
+        database.insert(StepEntry.TABLE_NAME,
+                        null,
+                        oldValues);
+        database.insert(StepEntry.TABLE_NAME,
+                        null,
+                        newValues);
 
         Cursor cursor = database.query(StepEntry.TABLE_NAME,
                 null,

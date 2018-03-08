@@ -12,8 +12,6 @@ public class StepVideoActivity extends AppCompatActivity {
 
     public static final String EXTRA_STEP = "extra_step";
 
-    private StepVideoFragment videoFragment;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,7 +27,8 @@ public class StepVideoActivity extends AppCompatActivity {
 
         Step step = intent.getParcelableExtra(EXTRA_STEP);
 
-        videoFragment = (StepVideoFragment) getSupportFragmentManager()
+        StepVideoFragment videoFragment =
+                (StepVideoFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.step_video_fragment);
 
         videoFragment.swapData(step);

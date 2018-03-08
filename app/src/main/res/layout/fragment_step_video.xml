@@ -30,6 +30,7 @@
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:src="@drawable/exo_controls_pause"
+            android:contentDescription="@string/content_description_pause_button"
             android:visibility="gone" />
 
         <ImageView
@@ -37,6 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/reload"
+            android:contentDescription="@string/content_description_replay_button"
             android:visibility="gone" />
 
         <ProgressBar

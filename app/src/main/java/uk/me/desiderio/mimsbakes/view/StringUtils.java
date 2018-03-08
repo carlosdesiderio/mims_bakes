@@ -11,8 +11,12 @@ public class StringUtils {
      * returns ingredient string formatted for the details view ingredient list
      * eg: 1.5 tsp salt
      */
-    public static String getFormatedIngredientString(String name, float quantity, String meassure) {
-        return getFormattedQuantity(quantity) + getFormatedMeassure(meassure) + " " + name;
+    public static String getFormatedIngredientString(String name,
+                                                     float quantity,
+                                                     String meassure) {
+        return getFormattedQuantity(quantity) +
+                getFormatedMeassure(meassure) +
+                " " + name;
     }
 
     /**

@@ -36,13 +36,15 @@ public class BakesDataUtils {
         List<Ingredient> ingredientList = new ArrayList<>();
 
         while (cursor.moveToNext()) {
-            String name = cursor.getString(cursor.getColumnIndex(IngredientEntry
-                    .COLUMN_NAME_INGREDIENT_NAME));
-            float quantity = cursor.getFloat(cursor.getColumnIndex(IngredientEntry
-                    .COLUMN_NAME_INGREDIENT_QUANTITY));
-            String measure = cursor.getString(cursor.getColumnIndex(IngredientEntry
-                    .COLUMN_NAME_INGREDIENT_MEASURE));
-            int shopping = cursor.getInt(cursor.getColumnIndex(IngredientEntry.FLAG_NAME_SHOPPING));
+            String name = cursor.getString(cursor.getColumnIndex(
+                    IngredientEntry.COLUMN_NAME_INGREDIENT_NAME));
+            float quantity = cursor.getFloat(cursor.getColumnIndex(
+                    IngredientEntry.COLUMN_NAME_INGREDIENT_QUANTITY));
+            String measure = cursor.getString(
+                    cursor.getColumnIndex(
+                            IngredientEntry.COLUMN_NAME_INGREDIENT_MEASURE));
+            int shopping = cursor.getInt(
+                    cursor.getColumnIndex(IngredientEntry.FLAG_NAME_SHOPPING));
 
             Ingredient ingredient = new Ingredient(name, quantity, measure, shopping);
             ingredientList.add(ingredient);
@@ -59,10 +61,14 @@ public class BakesDataUtils {
         List<Recipe> recipeList = new ArrayList<>();
         if (cursor.moveToFirst()) {
             do {
-                int recipeId = cursor.getInt(cursor.getColumnIndex(RecipeEntry.COLUMN_NAME_ID));
-                String name = cursor.getString(cursor.getColumnIndex(RecipeEntry.COLUMN_NAME_NAME));
-                int servings = cursor.getInt(cursor.getColumnIndex(RecipeEntry.COLUMN_NAME_SERVINGS));
-                String imageURLString = cursor.getString(cursor.getColumnIndex(RecipeEntry
+                int recipeId = cursor.getInt(
+                        cursor.getColumnIndex(RecipeEntry.COLUMN_NAME_ID));
+                String name = cursor.getString(
+                        cursor.getColumnIndex(RecipeEntry.COLUMN_NAME_NAME));
+                int servings = cursor.getInt(
+                        cursor.getColumnIndex(RecipeEntry.COLUMN_NAME_SERVINGS));
+                String imageURLString = cursor.getString(
+                        cursor.getColumnIndex(RecipeEntry
                         .COLUMN_NAME_IMAGE));
 
                 Recipe recipe = new Recipe(recipeId,

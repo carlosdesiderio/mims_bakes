@@ -66,12 +66,24 @@ public class RecipeTest {
     @Test
     public void givenARecipe_whenAccessingProperties_returnAllAsExpected() {
 
-        assertEquals("Recipe returned wrong id", MOCK_RECIPE_ID, recipe.getRecipeId());
-        assertEquals("Recipe returned wrong name", MOCK_RECIPE_NAME, recipe.getName());
-        assertEquals("Recipe returned wrong serving", MOCK_RECIPE_SERVINGS, recipe.getServings());
-        assertEquals("Recipe returned wrong url", MOCK_RECIPE_IMAGE_URL, recipe.getImageURLString());
-        assertEquals("Recipe returned wrong ingredients", mockRecipeIngredients, recipe.getIngredients());
-        assertEquals("Recipe returned wrong steps", mockRecipeSteps, recipe.getSteps());
+        assertEquals("Recipe returned wrong id",
+                     MOCK_RECIPE_ID,
+                     recipe.getRecipeId());
+        assertEquals("Recipe returned wrong name",
+                     MOCK_RECIPE_NAME,
+                     recipe.getName());
+        assertEquals("Recipe returned wrong serving",
+                     MOCK_RECIPE_SERVINGS,
+                     recipe.getServings());
+        assertEquals("Recipe returned wrong url",
+                     MOCK_RECIPE_IMAGE_URL,
+                     recipe.getImageURLString());
+        assertEquals("Recipe returned wrong ingredients",
+                     mockRecipeIngredients,
+                     recipe.getIngredients());
+        assertEquals("Recipe returned wrong steps",
+                     mockRecipeSteps,
+                     recipe.getSteps());
     }
 
     @Test
@@ -85,10 +97,18 @@ public class RecipeTest {
         int serving = values.getAsInteger(Recipe.NODE_NAME_SERVINGS);
         String url = values.getAsString(Recipe.NODE_NAME_IMAGE);
 
-        assertEquals("Recipe ContentValues returned with wrong id", MOCK_RECIPE_ID, id);
-        assertEquals("Recipe ContentValues returned with wrong name", MOCK_RECIPE_NAME, name);
-        assertEquals("Recipe ContentValues returned with wrong serving", MOCK_RECIPE_SERVINGS, serving);
-        assertEquals("Recipe ContentValues returned with wrong url", MOCK_RECIPE_IMAGE_URL, url);
+        assertEquals("Recipe ContentValues returned with wrong id",
+                     MOCK_RECIPE_ID,
+                     id);
+        assertEquals("Recipe ContentValues returned with wrong name",
+                     MOCK_RECIPE_NAME,
+                     name);
+        assertEquals("Recipe ContentValues returned with wrong serving",
+                     MOCK_RECIPE_SERVINGS,
+                     serving);
+        assertEquals("Recipe ContentValues returned with wrong url",
+                     MOCK_RECIPE_IMAGE_URL,
+                     url);
 
     }
 }

@@ -28,13 +28,17 @@ public class MatcherUtils {
         return new TypeSafeDiagnosingMatcher<Recipe>() {
             @Override
             public void describeTo(final Description description) {
-                description.appendText("Recipe name should be ").appendValue(name);
+                description.
+                        appendText("Recipe name should be ").
+                        appendValue(name);
             }
 
             @Override
             protected boolean matchesSafely(final Recipe recipe,
-                                            final Description mismatchDescription) {
-                mismatchDescription.appendText(" was ").appendValue(recipe.getName());
+                                            final Description description) {
+                description.
+                        appendText(" was ").
+                        appendValue(recipe.getName());
                 return recipe.getName().equals(name);
             }
         };
@@ -45,19 +49,21 @@ public class MatcherUtils {
      * Returns a matcher that matches Views based on position
      * and matcher provided as parameter
      */
-    public static Matcher<View> atPosition(final int position, @NonNull final Matcher<View> matcher) {
-        checkNotNull(matcher);
+    public static Matcher<View> atPosition(final int position,
+                                           @NonNull final Matcher<View> matcher) {
         return new BoundedMatcher<View, RecyclerView>(RecyclerView.class) {
             @Override
             public void describeTo(Description description) {
                 description.appendText(
-                        "RecyclerView should have item at position " + position + ": ");
+                        "RecyclerView should have item at position " +
+                                position + ": ");
                 matcher.describeTo(description);
             }
 
             @Override
             protected boolean matchesSafely(final RecyclerView view) {
-                RecyclerView.ViewHolder viewHolder = view.findViewHolderForAdapterPosition(position);
+                RecyclerView.ViewHolder viewHolder =
+                        view.findViewHolderForAdapterPosition(position);
                 if (viewHolder == null) {
                     return false;
                 }

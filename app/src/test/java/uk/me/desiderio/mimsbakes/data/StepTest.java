@@ -41,21 +41,33 @@ public class StepTest {
     @Before
     public void setUp() {
         when(step.getStepId()).thenReturn(MOCK_RECIPE_STEP_ID);
-        when(step.getShortDescription()).thenReturn(MOCK_RECIPE_STEP_SHORT_DESC);
+        when(step.getShortDescription())
+                .thenReturn(MOCK_RECIPE_STEP_SHORT_DESC);
         when(step.getDescription()).thenReturn(MOCK_RECIPE_STEP_DESC);
         when(step.getVideoURLString()).thenReturn(MOCK_RECIPE_STEP_VIDEO_URL);
-        when(step.getThumbnailURLString()).thenReturn(MOCK_RECIPE_STEP_THUMBNAIL_URL);
+        when(step.getThumbnailURLString())
+                .thenReturn(MOCK_RECIPE_STEP_THUMBNAIL_URL);
 
         when(step.toContentValues()).thenCallRealMethod();
     }
 
     @Test
     public void givenAnIngredient_whenAccessingProperties_returnAllAsExpected() {
-        assertEquals("Step returned wrong id", MOCK_RECIPE_STEP_ID, step.getStepId());
-        assertEquals("Step returned wrong short description", MOCK_RECIPE_STEP_SHORT_DESC, step.getShortDescription());
-        assertEquals("Step returned wrong long description", MOCK_RECIPE_STEP_DESC, step.getDescription());
-        assertEquals("Step returned wrong long description", MOCK_RECIPE_STEP_VIDEO_URL, step.getVideoURLString());
-        assertEquals("Step returned wrong long description", MOCK_RECIPE_STEP_THUMBNAIL_URL, step.getThumbnailURLString());
+        assertEquals("Step returned wrong id",
+                     MOCK_RECIPE_STEP_ID,
+                     step.getStepId());
+        assertEquals("Step returned wrong short description",
+                     MOCK_RECIPE_STEP_SHORT_DESC,
+                     step.getShortDescription());
+        assertEquals("Step returned wrong long description",
+                     MOCK_RECIPE_STEP_DESC,
+                     step.getDescription());
+        assertEquals("Step returned wrong long description",
+                     MOCK_RECIPE_STEP_VIDEO_URL,
+                     step.getVideoURLString());
+        assertEquals("Step returned wrong long description",
+                     MOCK_RECIPE_STEP_THUMBNAIL_URL,
+                     step.getThumbnailURLString());
     }
 
     @Test
@@ -70,11 +82,20 @@ public class StepTest {
         String videoUrl = values.getAsString(Step.NODE_NAME_STEP_VIDEO_URL);
         String thumbnailUrl = values.getAsString(Step.NODE_NAME_STEP_THUMBNAIL_URL);
 
-        assertEquals("Step ContentValues returned with wrong id", MOCK_RECIPE_STEP_ID, id);
-        assertEquals("Step ContentValues returned with wrong short description", MOCK_RECIPE_STEP_SHORT_DESC, shortDesc);
-        assertEquals("Step ContentValues returned with wrong long description", MOCK_RECIPE_STEP_DESC, desc);
-        assertEquals("Step ContentValues returned with wrong video url", MOCK_RECIPE_STEP_VIDEO_URL, videoUrl);
-        assertEquals("Step ContentValues returned with wrong thumbnail url", MOCK_RECIPE_STEP_THUMBNAIL_URL, thumbnailUrl);
-
+        assertEquals("Step ContentValues returned with wrong id",
+                     MOCK_RECIPE_STEP_ID,
+                     id);
+        assertEquals("Step ContentValues returned with wrong short description",
+                     MOCK_RECIPE_STEP_SHORT_DESC,
+                     shortDesc);
+        assertEquals("Step ContentValues returned with wrong long description",
+                     MOCK_RECIPE_STEP_DESC,
+                     desc);
+        assertEquals("Step ContentValues returned with wrong video url",
+                     MOCK_RECIPE_STEP_VIDEO_URL,
+                     videoUrl);
+        assertEquals("Step ContentValues returned with wrong thumbnail url",
+                     MOCK_RECIPE_STEP_THUMBNAIL_URL,
+                     thumbnailUrl);
     }
 }

@@ -85,14 +85,18 @@ public class MainActivityTest {
     public void whenScrollToItem_thenItemIsPopulatedWithExpectedName() {
         onView(withId(R.id.recipes_recycler_view))
                 .perform(scrollToPosition(recipePosition))
-                .check(matches(atPosition(recipePosition, hasDescendant(withText(expectedRecipeName)))));
+                .check(matches(atPosition(recipePosition,
+                                          hasDescendant(withText(
+                                                  expectedRecipeName)))));
     }
 
     @Test
     public void whenScrollToItem_thenItemIsPopulatedWithExpecteSubtitle() {
         onView(withId(R.id.recipes_recycler_view))
                 .perform(scrollToPosition(recipePosition))
-                .check(matches(atPosition(recipePosition, hasDescendant(withText(expectedRecipeSubtitle)))));
+                .check(matches(atPosition(recipePosition,
+                                          hasDescendant(withText(
+                                                  expectedRecipeSubtitle)))));
     }
 
     @Test

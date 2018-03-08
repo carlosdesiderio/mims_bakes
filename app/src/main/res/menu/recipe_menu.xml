@@ -4,6 +4,6 @@
     <item
         android:id="@+id/shop_all"
         android:icon="@drawable/basket"
-        android:title="Add all ingredients to shopping list"
+        android:title="@string/menu_option_add_all"
         app:showAsAction="always" />
 </menu>

@@ -23,7 +23,8 @@ public class BakesMockDataUtils {
     public static final int INGREDIENT_MOCK_QUANTITY = 100;
     public static final String INGREDIENT_MOCK_MEASURE = "grams ";
 
-    public static final String STEP_MOCK_SHORT_DESCRIPTION = "Very short description ";
+    public static final String STEP_MOCK_SHORT_DESCRIPTION
+            = "Very short description ";
     public static final String STEP_MOCK_DESCRIPTION = "Very long description ";
     public static final String STEP_MOCK_THUMBNAIL_URL = "url.to.thumbnail ";
     public static final String STEP_MOCK_VIDEO_URL = "url.to.video ";
@@ -39,7 +40,8 @@ public class BakesMockDataUtils {
     }
 
 
-    public static List<ContentValues> getMockIngredients(int ingredientsCount, int foreignKey) {
+    public static List<ContentValues> getMockIngredients(int ingredientsCount,
+                                                         int foreignKey) {
         List<ContentValues> valuesList = new ArrayList<>();
         for (int i = 0; i < ingredientsCount; i++) {
             ContentValues values = getMockIngredientContentValues(i, foreignKey);
@@ -48,16 +50,21 @@ public class BakesMockDataUtils {
         return valuesList;
     }
 
-    public static ContentValues getMockIngredientContentValues(int i, int foreignKey) {
+    public static ContentValues getMockIngredientContentValues(int i,
+                                                               int foreignKey) {
         ContentValues values = new ContentValues();
-        values.put(IngredientEntry.COLUMN_NAME_INGREDIENT_NAME, INGREDIENT_MOCK_NAME  + i);
-        values.put(IngredientEntry.COLUMN_NAME_INGREDIENT_QUANTITY, INGREDIENT_MOCK_QUANTITY  + i);
-        values.put(IngredientEntry.COLUMN_NAME_INGREDIENT_MEASURE, INGREDIENT_MOCK_MEASURE  + i);
+        values.put(IngredientEntry.COLUMN_NAME_INGREDIENT_NAME,
+                   INGREDIENT_MOCK_NAME  + i);
+        values.put(IngredientEntry.COLUMN_NAME_INGREDIENT_QUANTITY,
+                   INGREDIENT_MOCK_QUANTITY  + i);
+        values.put(IngredientEntry.COLUMN_NAME_INGREDIENT_MEASURE,
+                   INGREDIENT_MOCK_MEASURE  + i);
         values.put(IngredientEntry.COLUMN_RECIPE_FOREING_KEY, foreignKey);
         return values;
     }
 
-    public static List<ContentValues> getMockSteps(int stepsCount, int foreignKey) {
+    public static List<ContentValues> getMockSteps(int stepsCount,
+                                                   int foreignKey) {
         List<ContentValues> valuesList = new ArrayList<>();
         for (int i = 0; i < stepsCount; i++) {
             ContentValues values = getMockStepContentValues(i, foreignKey);
@@ -66,14 +73,20 @@ public class BakesMockDataUtils {
         return valuesList;
     }
 
-    public static ContentValues getMockStepContentValues(int i, int foreignKey) {
+    public static ContentValues getMockStepContentValues(int i,
+                                                         int foreignKey) {
         ContentValues values = new ContentValues();
         values.put(StepEntry.COLUMN_NAME_STEP_ID, i);
-        values.put(StepEntry.COLUMN_NAME_STEP_SHORT_DESC, STEP_MOCK_SHORT_DESCRIPTION + i);
-        values.put(StepEntry.COLUMN_NAME_STEP_DESC, STEP_MOCK_DESCRIPTION + i);
-        values.put(StepEntry.COLUMN_NAME_STEP_THUMBNAIL_URL, STEP_MOCK_THUMBNAIL_URL + i);
-        values.put(StepEntry.COLUMN_NAME_STEP_VIDEO_URL, STEP_MOCK_VIDEO_URL + i);
-        values.put(StepEntry.COLUMN_RECIPE_FOREING_KEY, foreignKey);
+        values.put(StepEntry.COLUMN_NAME_STEP_SHORT_DESC,
+                   STEP_MOCK_SHORT_DESCRIPTION + i);
+        values.put(StepEntry.COLUMN_NAME_STEP_DESC,
+                   STEP_MOCK_DESCRIPTION + i);
+        values.put(StepEntry.COLUMN_NAME_STEP_THUMBNAIL_URL,
+                   STEP_MOCK_THUMBNAIL_URL + i);
+        values.put(StepEntry.COLUMN_NAME_STEP_VIDEO_URL,
+                   STEP_MOCK_VIDEO_URL + i);
+        values.put(StepEntry.COLUMN_RECIPE_FOREING_KEY,
+                   foreignKey);
         return values;
     }
 }

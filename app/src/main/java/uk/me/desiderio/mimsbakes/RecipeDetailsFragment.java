@@ -22,7 +22,8 @@ import uk.me.desiderio.mimsbakes.data.model.Step;
  */
 
 
-public class RecipeDetailsFragment extends Fragment implements RecipeDetailsAdapter.OnClickListItemListener {
+public class RecipeDetailsFragment extends Fragment
+        implements RecipeDetailsAdapter.OnClickListItemListener {
 
     private OnRecipeDetailsFragmentItemClickListener listener;
     private RecipeDetailsAdapter adapter;
@@ -47,11 +48,16 @@ public class RecipeDetailsFragment extends Fragment implements RecipeDetailsAdap
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView =  inflater.inflate(R.layout.fragment_recipe_details, container, false);
-        RecyclerView recyclerView = rootView.findViewById(R.id.recipe_details_recycler_view);
-        titleTextView = rootView.findViewById(R.id.recipe_details_title_text_view);
+        View rootView =  inflater.inflate(R.layout.fragment_recipe_details,
+                                          container,
+                                          false);
+        RecyclerView recyclerView =
+                rootView.findViewById(R.id.recipe_details_recycler_view);
+        titleTextView =
+                rootView.findViewById(R.id.recipe_details_title_text_view);
 
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(manager);
@@ -71,7 +77,7 @@ public class RecipeDetailsFragment extends Fragment implements RecipeDetailsAdap
             listener = (OnRecipeDetailsFragmentItemClickListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnRecipeDetailsFragmentItemClickListener");
+                  + " must implement OnRecipeDetailsFragmentItemClickListener");
         }
     }
 

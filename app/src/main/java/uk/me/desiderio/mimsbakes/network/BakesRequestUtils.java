@@ -13,12 +13,12 @@ import uk.me.desiderio.mimsbakes.data.model.Recipe;
 
 public class BakesRequestUtils {
 
-    // TODO: 05/12/2017 add retrofit proguard settings
+    private static final String BASE_URL =
+            "https://d17h27t6h515a5.cloudfront.net";
 
-    private static final String BASE_URL = "https://d17h27t6h515a5.cloudfront.net";
-
-    /** provides a {@link Call} object that will make a request to the baking service
-     * and return a list of {@link Recipe}
+    /**
+     * provides a {@link Call} object that will make a request
+     * to the baking service and return a list of {@link Recipe}
      */
     public static Call<List<Recipe>> buildBakingApi() {
         Retrofit retrofit = new Retrofit.Builder()

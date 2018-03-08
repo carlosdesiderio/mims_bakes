@@ -17,6 +17,9 @@ import uk.me.desiderio.mimsbakes.data.model.Ingredient;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
+import static uk.me.desiderio.mimsbakes.data.model.Ingredient.NODE_NAME_INGREDIENT_MEASURE;
+import static uk.me.desiderio.mimsbakes.data.model.Ingredient.NODE_NAME_INGREDIENT_NAME;
+import static uk.me.desiderio.mimsbakes.data.model.Ingredient.NODE_NAME_INGREDIENT_QUANTITY;
 
 
 /**
@@ -39,8 +42,10 @@ public class IngredientTest {
     @Before
     public void setUp() {
         when(ingredient.getName()).thenReturn(MOCK_RECIPE_INGREDIENT_NAME);
-        when(ingredient.getQuantity()).thenReturn(MOCK_RECIPE_INGREDIENT_QUANTITY);
-        when(ingredient.getMeasure()).thenReturn(MOCK_RECIPE_INGREDIENT_MEASURE);
+        when(ingredient.getQuantity())
+                .thenReturn(MOCK_RECIPE_INGREDIENT_QUANTITY);
+        when(ingredient.getMeasure())
+                .thenReturn(MOCK_RECIPE_INGREDIENT_MEASURE);
 
         when(ingredient.toContentValues()).thenCallRealMethod();
 
@@ -48,9 +53,15 @@ public class IngredientTest {
 
     @Test
     public void givenAnIngredient_whenAccessingProperties_returnAllAsExpected() {
-        assertEquals("Ingredient returned wrong name", MOCK_RECIPE_INGREDIENT_NAME, ingredient.getName());
-        assertEquals("Ingredient returned wrong quantity value", MOCK_RECIPE_INGREDIENT_QUANTITY, ingredient.getQuantity());
-        assertEquals("Ingredient returned wrong measure units", MOCK_RECIPE_INGREDIENT_MEASURE, ingredient.getMeasure());
+        assertEquals("Ingredient returned wrong name",
+                     MOCK_RECIPE_INGREDIENT_NAME,
+                     ingredient.getName());
+        assertEquals("Ingredient returned wrong quantity value",
+                     MOCK_RECIPE_INGREDIENT_QUANTITY,
+                     ingredient.getQuantity());
+        assertEquals("Ingredient returned wrong measure units",
+                     MOCK_RECIPE_INGREDIENT_MEASURE,
+                     ingredient.getMeasure());
     }
 
     @Test
@@ -60,13 +71,20 @@ public class IngredientTest {
         assertNotNull("Ingredient return null ContentValues", values);
 
 
-        String name = values.getAsString(Ingredient.NODE_NAME_INGREDIENT_NAME);
-        float quantity = values.getAsFloat(Ingredient.NODE_NAME_INGREDIENT_QUANTITY);
-        String measure = values.getAsString(Ingredient.NODE_NAME_INGREDIENT_MEASURE);
+        String name = values.getAsString(NODE_NAME_INGREDIENT_NAME);
+        float quantity = values.getAsFloat(NODE_NAME_INGREDIENT_QUANTITY);
+        String measure = values.getAsString(NODE_NAME_INGREDIENT_MEASURE);
 
-        assertEquals("Recipe ContentValues returned with wrong name", MOCK_RECIPE_INGREDIENT_NAME, name);
-        assertEquals("Recipe ContentValues returned with wrong quantity", MOCK_RECIPE_INGREDIENT_QUANTITY, quantity, 0);
-        assertEquals("Recipe ContentValues returned with wrong measure", MOCK_RECIPE_INGREDIENT_MEASURE, measure);
+        assertEquals("Recipe ContentValues returned with wrong name",
+                     MOCK_RECIPE_INGREDIENT_NAME,
+                     name);
+        assertEquals("Recipe ContentValues returned with wrong quantity",
+                     MOCK_RECIPE_INGREDIENT_QUANTITY,
+                     quantity,
+                     0);
+        assertEquals("Recipe ContentValues returned with wrong measure",
+                     MOCK_RECIPE_INGREDIENT_MEASURE,
+                     measure);
 
     }
 }

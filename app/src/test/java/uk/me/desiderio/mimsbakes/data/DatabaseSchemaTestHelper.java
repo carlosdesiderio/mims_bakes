@@ -20,7 +20,6 @@ public class DatabaseSchemaTestHelper {
         String sql = "SELECT name FROM sqlite_master WHERE type='table';";
         Cursor cursor = db.rawQuery(sql,null);
         while (cursor.moveToNext()) {
-            String name = cursor.getString(0);
             if (cursor.getString(0).equals(tableName)) {
                 return true;
             }
@@ -29,7 +28,9 @@ public class DatabaseSchemaTestHelper {
 
     }
 
-    public static TableDescription getColumnDetailsOrNull(SQLiteDatabase db, String table, String column) {
+    public static TableDescription getColumnDetailsOrNull(SQLiteDatabase db,
+                                                          String table,
+                                                          String column) {
         Cursor c = queryForTableInfo(db, table);
 
         while (c.moveToNext()) {
@@ -45,7 +46,8 @@ public class DatabaseSchemaTestHelper {
         return null;
     }
 
-    public static List<String> listColumnNames(SQLiteDatabase db, String tableName) {
+    public static List<String> listColumnNames(SQLiteDatabase db,
+                                               String tableName) {
         List<String> columns = new ArrayList<>();
 
         Cursor c = queryForTableInfo(db, tableName);
@@ -60,7 +62,8 @@ public class DatabaseSchemaTestHelper {
         Cursor c = db.rawQuery("pragma user_version;", null);
 
         if (!c.moveToNext()) {
-            throw new RuntimeException(String.format("failed executing: %s", "pragma user_version;"));
+            throw new RuntimeException(String.format("failed executing: %s",
+                                                     "pragma user_version;"));
         }
 
         return c.getInt(0);
@@ -71,7 +74,8 @@ public class DatabaseSchemaTestHelper {
         position| name | type | Nullable | Default value | Primary Key.
      */
     private static Cursor queryForTableInfo(SQLiteDatabase db, String tableName) {
-        return db.rawQuery("pragma table_info(" + tableName + ");", null);
+        return db.rawQuery("pragma table_info(" + tableName + ");",
+                           null);
     }
 
     public static final class TableDescription {
@@ -80,7 +84,10 @@ public class DatabaseSchemaTestHelper {
         final boolean isNotNull;
         final boolean isPk;
 
-        private TableDescription(String name, String type, boolean isNotNull, boolean isPk) {
+        private TableDescription(String name,
+                                 String type,
+                                 boolean isNotNull,
+                                 boolean isPk) {
             this.name = name;
             this.type = type;
             this.isNotNull = isNotNull;
@@ -107,8 +114,9 @@ public class DatabaseSchemaTestHelper {
         }
 
         /**
-         * Not Null is kinda stupid.. it works only if there is explicit declaration of NOT NULL.
-         * It should work as well for each PK columns (which are not null by default), but it doesn't
+         * Not Null is kinda stupid.. it works only if there is a explicit
+         * declaration of NOT NULL. It should work as well for each PK columns
+         * (which are not null by default), but it doesn't
          */
         public static boolean isNotNull(Cursor c) {
             return c.getInt(c.getColumnIndex(NOT_NULL)) == 1;

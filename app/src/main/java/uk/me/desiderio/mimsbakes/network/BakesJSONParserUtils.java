@@ -26,7 +26,9 @@ public class BakesJSONParserUtils {
      * reads local file with a mock version of the baking JSON response
      */
     public static String readJsonFile (String filename) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(ASSET_BASE_PATH + filename)));
+        BufferedReader br = new BufferedReader(
+                new InputStreamReader(
+                        new FileInputStream(ASSET_BASE_PATH + filename)));
         StringBuilder sb = new StringBuilder();
         String line = br.readLine();
         while (line != null) {
@@ -38,9 +40,11 @@ public class BakesJSONParserUtils {
     }
 
     /**
-     * parses baking JSON response string into an array of {@link Recipe} objects
+     * parses baking JSON response string into an array of
+     * {@link Recipe} objects
      */
-    public static List<Recipe> parseBakeRecipesJsonString(String jsonString) throws JSONException {
+    public static List<Recipe> parseBakeRecipesJsonString(String jsonString)
+            throws JSONException {
         Gson gson = new Gson();
         Type listType = new TypeToken<List<Recipe>>(){}.getType();
         return gson.fromJson(jsonString,listType );

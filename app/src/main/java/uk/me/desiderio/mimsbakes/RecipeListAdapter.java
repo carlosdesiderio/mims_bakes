@@ -22,7 +22,8 @@ import uk.me.desiderio.mimsbakes.view.ImageUtils;
  * Adapter for the list of recipes
  */
 
-public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.RecipeHolder> {
+public class RecipeListAdapter extends
+        RecyclerView.Adapter<RecipeListAdapter.RecipeHolder> {
 
     private static final String TAG = RecipeListAdapter.class.getSimpleName();
 
@@ -41,8 +42,11 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
     @Override
     public RecipeHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View recipeView = LayoutInflater.from(parent.getContext()).inflate(R.layout
-                .recipe_list_item_layout, parent, false);
+        View recipeView = LayoutInflater
+                .from(parent.getContext())
+                .inflate(R.layout.recipe_list_item_layout,
+                         parent,
+                         false);
         return new RecipeHolder(recipeView);
     }
 
@@ -80,7 +84,9 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
     private String getServingsString(ViewHolder holder, int servings) {
         Resources resources = holder.itemView.getResources();
-        return resources.getQuantityString(R.plurals.recipe_servings_plural, servings, servings);
+        return resources.getQuantityString(R.plurals.recipe_servings_plural,
+                                           servings,
+                                           servings);
     }
 
 
@@ -113,9 +119,12 @@ public class RecipeListAdapter extends RecyclerView.Adapter<RecipeListAdapter.Re
 
         public RecipeHolder(View itemView) {
             super(itemView);
-            recipeImageView = itemView.findViewById(R.id.recipe_item_image_view);
-            recipeNameTextView = itemView.findViewById(R.id.recipe_item_name_text_view);
-            recipeServings = itemView.findViewById(R.id.recipe_item_servings_text_view);
+            recipeImageView =
+                    itemView.findViewById(R.id.recipe_item_image_view);
+            recipeNameTextView =
+                    itemView.findViewById(R.id.recipe_item_name_text_view);
+            recipeServings =
+                    itemView.findViewById(R.id.recipe_item_servings_text_view);
         }
     }
 }

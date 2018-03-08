@@ -10,7 +10,8 @@ import java.util.List;
 import uk.me.desiderio.mimsbakes.data.BakesContract.RecipeEntry;
 
 /**
- * holds data about a recipe. The class is used to parse recipe data from JSON with GSON
+ * holds data about a recipe. The class is used
+ * to parse recipe data from JSON with GSON
  */
 
 public class Recipe implements Parcelable {
@@ -34,7 +35,12 @@ public class Recipe implements Parcelable {
 
     public Recipe() {}
 
-    public Recipe(int recipeId, String name, int servings, String imageURLString, List<Ingredient> ingredients, List<Step> steps) {
+    public Recipe(int recipeId,
+                  String name,
+                  int servings,
+                  String imageURLString,
+                  List<Ingredient> ingredients,
+                  List<Step> steps) {
         this.id = recipeId;
         this.name = name;
         this.servings = servings;
@@ -125,8 +131,9 @@ public class Recipe implements Parcelable {
         this.image = imageURLString;
     }
 
-    /** returns a {@link android.content.ContentValues} object with the recipe's property value
-     * to be stored in the local database. These are all the primitive values not including
+    /** returns a {@link android.content.ContentValues} object with
+     * the recipe's property value to be stored in the local database.
+     * These are all the primitive values not including
      * the lists that will be stored in a different table
      */
     public ContentValues toContentValues() {
@@ -137,18 +144,6 @@ public class Recipe implements Parcelable {
         values.put(NODE_NAME_IMAGE, getImageURLString());
         return values;
     }
-
-   /* @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder("Recipe: \n");
-        builder.append("Name: " + name);
-        builder.append("\nServings: " +servings);
-        builder.append("\nIngredients: " +ingredients.size());
-        builder.append("\nSteps: " + steps.size());
-        builder.append("\nUrl: " +image);
-
-        return builder.toString();
-    }*/
 
     @Override
     public int describeContents() {

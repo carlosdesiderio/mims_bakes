@@ -17,32 +17,41 @@ import uk.me.desiderio.mimsbakes.data.BakesContract.ShoppingEntry;
 import uk.me.desiderio.mimsbakes.view.StringUtils;
 
 import static uk.me.desiderio.mimsbakes.MainActivity.EXTRA_RECIPE_ID;
+import static uk.me.desiderio.mimsbakes.data.BakesContentProvider.SELECTION_SHOPPING_LIST_INGREDIENTS;
+import static uk.me.desiderio.mimsbakes.data.BakesContract.IngredientEntry.COLUMN_NAME_INGREDIENT_MEASURE;
+import static uk.me.desiderio.mimsbakes.data.BakesContract.IngredientEntry.COLUMN_NAME_INGREDIENT_NAME;
+import static uk.me.desiderio.mimsbakes.data.BakesContract.IngredientEntry.COLUMN_NAME_INGREDIENT_QUANTITY;
+import static uk.me.desiderio.mimsbakes.data.BakesContract.IngredientEntry.COLUMN_RECIPE_FOREING_KEY;
+import static uk.me.desiderio.mimsbakes.view.StringUtils.getFormatedIngredientStringForShopping;
 
 /**
  * Provides {@link RemoteViews} to the application's widget
  */
 
 public class BakesRemoteViewService extends RemoteViewsService {
-    private static final String TAG = BakesRemoteViewService.class.getSimpleName();
+    private static final String TAG =
+            BakesRemoteViewService.class.getSimpleName();
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new BakesRemoteViewFactory(this.getApplicationContext(), intent);
+        return new BakesRemoteViewFactory(this.getApplicationContext());
     }
 
-    class BakesRemoteViewFactory implements RemoteViewsService.RemoteViewsFactory {
+    class BakesRemoteViewFactory implements
+            RemoteViewsService.RemoteViewsFactory {
 
         Context applicationContext;
         Cursor cursor;
 
-        public BakesRemoteViewFactory(Context applicationContext, Intent intent) {
+        public BakesRemoteViewFactory(Context applicationContext) {
             this.applicationContext = applicationContext;
         }
 
         @Override
         public void onCreate() {
             Log.d(TAG, "onCreate: ");
-            getContentResolver().registerContentObserver(ShoppingEntry.CONTENT_URI,
+            getContentResolver().registerContentObserver(
+                    ShoppingEntry.CONTENT_URI,
                     false,
                     objectObserver);
         }
@@ -53,7 +62,7 @@ public class BakesRemoteViewService extends RemoteViewsService {
                 cursor.close();
             }
 
-            String selection = BakesContentProvider.SELECTION_SHOPPING_LIST_INGREDIENTS;
+            String selection = SELECTION_SHOPPING_LIST_INGREDIENTS;
 
             cursor = getContentResolver().query(
                     IngredientEntry.CONTENT_URI,
@@ -63,7 +72,8 @@ public class BakesRemoteViewService extends RemoteViewsService {
                     null);
         }
 
-        private ContentObserver objectObserver = new ContentObserver(new Handler()) {
+        private ContentObserver objectObserver = new ContentObserver(
+                new Handler()) {
             @Override
             public void onChange(boolean selfChange) {
                 Log.d(TAG, "onChange: ");
@@ -95,29 +105,35 @@ public class BakesRemoteViewService extends RemoteViewsService {
 
             cursor.moveToPosition(position);
 
-            String name = cursor.getString(cursor.getColumnIndex
-                    (IngredientEntry.COLUMN_NAME_INGREDIENT_NAME));
-            float quantity = cursor.getFloat(cursor.getColumnIndex
-                    (IngredientEntry.COLUMN_NAME_INGREDIENT_QUANTITY));
-            String meassure = cursor.getString(cursor
-                    .getColumnIndex(IngredientEntry.COLUMN_NAME_INGREDIENT_MEASURE));
-            int recipeId = cursor.getInt(cursor
-                    .getColumnIndex(IngredientEntry.COLUMN_RECIPE_FOREING_KEY));
+            String name = cursor.getString(
+                    cursor.getColumnIndex(COLUMN_NAME_INGREDIENT_NAME));
+            float quantity = cursor.getFloat(
+                    cursor.getColumnIndex(COLUMN_NAME_INGREDIENT_QUANTITY));
+            String meassure = cursor.getString(
+                    cursor.getColumnIndex(COLUMN_NAME_INGREDIENT_MEASURE));
+            int recipeId = cursor.getInt(
+                    cursor.getColumnIndex(COLUMN_RECIPE_FOREING_KEY));
 
-            String ingredientFormattedString = StringUtils.getFormatedIngredientStringForShopping(name,
-                    quantity, meassure);
+            String ingredientFormattedString =
+                    getFormatedIngredientStringForShopping(name,
+                                                           quantity,
+                                                           meassure);
 
-            RemoteViews views = new RemoteViews(applicationContext.getPackageName(),
+            RemoteViews views = new RemoteViews(
+                    applicationContext.getPackageName(),
                     R.layout.widget_ingredient_list_item_layout);
 
 
-            views.setTextViewText(R.id.widget_ingredient_list_item_text_view, ingredientFormattedString);
+            views.setTextViewText(R.id.widget_ingredient_list_item_text_view,
+                                  ingredientFormattedString);
 
             Bundle extras = new Bundle();
             extras.putInt(EXTRA_RECIPE_ID, recipeId);
             Intent fillInIntent = new Intent();
             fillInIntent.putExtras(extras);
-            views.setOnClickFillInIntent(R.id.widget_ingredient_list_item_text_view,fillInIntent);
+            views.setOnClickFillInIntent(
+                    R.id.widget_ingredient_list_item_text_view,
+                    fillInIntent);
             return views;
         }
 

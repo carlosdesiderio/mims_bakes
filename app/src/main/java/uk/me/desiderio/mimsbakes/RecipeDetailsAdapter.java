@@ -1,6 +1,9 @@
 package uk.me.desiderio.mimsbakes;
 
 import android.content.Context;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,12 +24,16 @@ import uk.me.desiderio.mimsbakes.view.ImageUtils;
 /**
  * Adapter for the recipe details
  *
- * The first list element is an {@link RecyclerView} ot show the list of ingredients
- * The rest of elements are each of the step of execution to carry out the current recipe
+ * The first list element is an {@link RecyclerView}
+ * to show the list of ingredients
+ * The rest of elements are each of the step of execution
+ * to carry out the current recipe
  */
 
-public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static final String TAG = RecipeDetailsAdapter.class.getSimpleName();
+public class RecipeDetailsAdapter
+        extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final String TAG =
+            RecipeDetailsAdapter.class.getSimpleName();
 
     private static final int VIEW_TYPE_INGREDIENT_LIST = 2;
     private static final int VIEW_TYPE_STEP = 4;
@@ -45,12 +52,15 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                      int viewType) {
         View view;
         switch (viewType) {
             case VIEW_TYPE_INGREDIENT_LIST:
-                view =  LayoutInflater.from(parent.getContext()).inflate(R.layout
-                        .step_list_ingredient_list_layout, parent, false);
+                view =  LayoutInflater.from(parent.getContext()).inflate(
+                        R.layout.step_list_ingredient_list_layout,
+                        parent,
+                        false);
                 return new IngredientViewHolder(view);
             case VIEW_TYPE_STEP:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout
@@ -68,7 +78,8 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
         switch (viewType) {
             case VIEW_TYPE_INGREDIENT_LIST:
                 List<Ingredient> ingredientList = recipe.getIngredients();
-                IngredientViewHolder ingredientViewHolder = (IngredientViewHolder) holder;
+                IngredientViewHolder ingredientViewHolder =
+                        (IngredientViewHolder) holder;
                 ingredientViewHolder.adapter.swapIngredientList(ingredientList);
                 setIngredientHighlight(holder, true);
                 break;
@@ -134,7 +145,8 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
         return recipe;
     }
 
-    private void setIngredientHighlight(RecyclerView.ViewHolder holder, boolean hasBackground) {
+    private void setIngredientHighlight(RecyclerView.ViewHolder holder,
+                                        boolean hasBackground) {
         int colorRes;
         if(hasBackground) {
             colorRes = R.color.colorBackground;
@@ -143,7 +155,7 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
 
         holder.itemView.setBackgroundColor(
-                holder.itemView.getResources().getColor(colorRes));
+                getBackgroundColor(holder.itemView, colorRes));
     }
 
     /**
@@ -154,6 +166,11 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
         return position - 1;
     }
 
+    @ColorInt
+    private int getBackgroundColor(View itemView, @ColorRes int colorRes) {
+        return ContextCompat.getColor(itemView.getContext(), colorRes);
+    }
+
     public class IngredientViewHolder extends RecyclerView.ViewHolder{
         public final RecyclerView ingredienRecyclerView;
         public final InternalIngredientListAdapter adapter;
@@ -161,9 +178,11 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
         public IngredientViewHolder(View itemView) {
             super(itemView);
 
-            ingredienRecyclerView = itemView.findViewById(R.id.step_ingredients_recycler_view);
+            ingredienRecyclerView =
+                    itemView.findViewById(R.id.step_ingredients_recycler_view);
 
-            LinearLayoutManager layoutManager = new LinearLayoutManager(itemView.getContext());
+            LinearLayoutManager layoutManager =
+                    new LinearLayoutManager(itemView.getContext());
             ingredienRecyclerView.setLayoutManager(layoutManager);
             adapter = new InternalIngredientListAdapter();
             ingredienRecyclerView.setAdapter(adapter);
@@ -171,7 +190,8 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 @Override
                 public void onIngredientSelected(Ingredient ingredient) {
                     if(clickListener != null) {
-                        clickListener.onIngredientSelected(ingredient, recipe.getRecipeId());
+                        clickListener.onIngredientSelected(ingredient,
+                                                           recipe.getRecipeId());
                     }
                 }
             });

@@ -3,9 +3,8 @@ package uk.me.desiderio.mimsbakes;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.media.session.MediaSessionCompat;
-import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -40,11 +39,11 @@ import uk.me.desiderio.mimsbakes.data.model.Step;
  * The class will be attached to either {@link StepVideoActivity} and
  * {@link RecipeDetailsActivity} depending on the device and rotation.
  */
-public class StepVideoFragment extends Fragment implements Player.EventListener {
+public class StepVideoFragment extends Fragment implements
+        Player.EventListener {
 
     private static final String TAG = StepVideoFragment.class.getSimpleName();
 
-    private Step step;
     private TextView descriptionTextView;
     private ProgressBar progressBar;
     private ImageView replayIcon;
@@ -58,9 +57,12 @@ public class StepVideoFragment extends Fragment implements Player.EventListener 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup
+            container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_step_video, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_step_video,
+                                         container,
+                                         false);
         descriptionTextView = rootView.findViewById(R.id.step_description_text_view);
         progressBar = rootView.findViewById(R.id.step_video_progress_bar);
         replayIcon = rootView.findViewById(R.id.step_video_replay_image_view);
@@ -85,8 +87,6 @@ public class StepVideoFragment extends Fragment implements Player.EventListener 
                 }
                 return true;
             }
-
-            ;
         });
 
         return rootView;
@@ -96,14 +96,14 @@ public class StepVideoFragment extends Fragment implements Player.EventListener 
      * updates view with data provided as its parameter
      */
     public void swapData(Step step) {
-        this.step = step;
         updateViewOnDataChange(step);
     }
 
     private void updateViewOnDataChange(Step step) {
-        step.getVideoURLString();
         descriptionTextView.setText(step.getDescription());
-        // at this stage of implementation, error handling is relied upon the player itself
+        /* at this stage of implementation,
+           error handling is relied upon the
+           player itself */
         Uri mediaUri = Uri.parse(step.getVideoURLString());
         preparePlayer(mediaUri);
     }
@@ -111,13 +111,16 @@ public class StepVideoFragment extends Fragment implements Player.EventListener 
     private void initializePlayer() {
         if (exoPlayer == null) {
             TrackSelector trackSelector = new DefaultTrackSelector();
-            exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
+            exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(),
+                                                           trackSelector);
 
             playerView.setPlayer(exoPlayer);
             exoPlayer.addListener(this);
 
-            String userAgent = Util.getUserAgent(getContext(), "MimsBakes");
-            DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), userAgent);
+            String userAgent = Util.getUserAgent(getContext(),
+                                                 "MimsBakes");
+            DataSource.Factory dataSourceFactory =
+                    new DefaultDataSourceFactory(getContext(), userAgent);
             mediaSourceFactory = new ExtractorMediaSource.Factory
                     (dataSourceFactory);
             exoPlayer.setPlayWhenReady(true);
@@ -199,48 +202,33 @@ public class StepVideoFragment extends Fragment implements Player.EventListener 
     }
 
     @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest) {
-
-    }
+    public void onTimelineChanged(Timeline timeline, Object manifest) { }
 
     @Override
-    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-
-    }
-
-    @Override
-    public void onLoadingChanged(boolean isLoading) {
-
-    }
+    public void onTracksChanged(TrackGroupArray trackGroups,
+                                TrackSelectionArray trackSelections) { }
 
     @Override
-    public void onRepeatModeChanged(int repeatMode) {
-
-    }
+    public void onLoadingChanged(boolean isLoading) { }
 
     @Override
-    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+    public void onRepeatModeChanged(int repeatMode) { }
 
-    }
+    @Override
+    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) { }
 
     @Override
     public void onPlayerError(ExoPlaybackException error) {
         Log.d(TAG, "Tosca onPlayerError: " + error.getMessage());
-
     }
 
     @Override
-    public void onPositionDiscontinuity(int reason) {
-
-    }
+    public void onPositionDiscontinuity(int reason) { }
 
     @Override
-    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-
-    }
+    public void onPlaybackParametersChanged(
+            PlaybackParameters playbackParameters) { }
 
     @Override
-    public void onSeekProcessed() {
-
-    }
+    public void onSeekProcessed() { }
 }

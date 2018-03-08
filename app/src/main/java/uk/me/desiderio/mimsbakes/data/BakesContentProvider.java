@@ -27,8 +27,10 @@ import static uk.me.desiderio.mimsbakes.data.BakesContract.IngredientEntry.FLAG_
 // TODO: 24/12/2017 add robelectric test which are in a stash
 public class BakesContentProvider extends ContentProvider {
 
-    public static final String SELECTION_ALL_RECIPE_INGREDIENT = COLUMN_RECIPE_FOREING_KEY + "=?";
-    public static final String SELECTION_SHOPPING_LIST_INGREDIENTS = FLAG_NAME_SHOPPING + "=?";
+    public static final String SELECTION_ALL_RECIPE_INGREDIENT =
+            COLUMN_RECIPE_FOREING_KEY + "=?";
+    public static final String SELECTION_SHOPPING_LIST_INGREDIENTS =
+            FLAG_NAME_SHOPPING + "=?";
 
     static final int RECIPES = 100;
     static final int RECIPES_WITH_ID = 101;
@@ -46,19 +48,33 @@ public class BakesContentProvider extends ContentProvider {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
         // recipe directory
-        uriMatcher.addURI(BakesContract.CONTENT_AUTHORITY, BakesContract.PATH_RECIPES, RECIPES);
+        uriMatcher.addURI(BakesContract.CONTENT_AUTHORITY,
+                          BakesContract.PATH_RECIPES,
+                          RECIPES);
         // single recipe
-        uriMatcher.addURI(BakesContract.CONTENT_AUTHORITY, BakesContract.PATH_RECIPES + "/#", RECIPES_WITH_ID);
+        uriMatcher.addURI(BakesContract.CONTENT_AUTHORITY,
+                          BakesContract.PATH_RECIPES + "/#",
+                          RECIPES_WITH_ID);
         // ingredient directory
-        uriMatcher.addURI(BakesContract.CONTENT_AUTHORITY, BakesContract.PATH_INGREDIENTS, INGREDIENTS);
+        uriMatcher.addURI(BakesContract.CONTENT_AUTHORITY,
+                          BakesContract.PATH_INGREDIENTS,
+                          INGREDIENTS);
         // single ingredient
-        uriMatcher.addURI(BakesContract.CONTENT_AUTHORITY, BakesContract.PATH_INGREDIENTS + "/#", INGREDIENTS_WITH_ID);
+        uriMatcher.addURI(BakesContract.CONTENT_AUTHORITY,
+                          BakesContract.PATH_INGREDIENTS + "/#",
+                          INGREDIENTS_WITH_ID);
         // step directory
-        uriMatcher.addURI(BakesContract.CONTENT_AUTHORITY, BakesContract.PATH_STEPS, STEPS);
+        uriMatcher.addURI(BakesContract.CONTENT_AUTHORITY,
+                          BakesContract.PATH_STEPS,
+                          STEPS);
         // single step
-        uriMatcher.addURI(BakesContract.CONTENT_AUTHORITY, BakesContract.PATH_STEPS + "/#", STEPS_WITH_ID);
+        uriMatcher.addURI(BakesContract.CONTENT_AUTHORITY,
+                          BakesContract.PATH_STEPS + "/#",
+                          STEPS_WITH_ID);
         // single shop ingredient
-        uriMatcher.addURI(BakesContract.CONTENT_AUTHORITY, BakesContract.PATH_SHOPPING, SHOPPING);
+        uriMatcher.addURI(BakesContract.CONTENT_AUTHORITY,
+                          BakesContract.PATH_SHOPPING,
+                          SHOPPING);
         return uriMatcher;
     }
 
@@ -70,8 +86,11 @@ public class BakesContentProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String
-            selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
+    public Cursor query(@NonNull Uri uri,
+                        @Nullable String[] projection,
+                        @Nullable String selection,
+                        @Nullable String[] selectionArgs,
+                        @Nullable String sortOrder) {
 
         int match = uriMatcher.match(uri);
 
@@ -96,8 +115,8 @@ public class BakesContentProvider extends ContentProvider {
                 break;
             default:
                 throw new UnsupportedOperationException(
-                        "BakesContentProvider doesn't support this operariong. Unknown URI : " +
-                                uri);
+                        "BakesContentProvider doesn't support " +
+                                "this operariong. Unknown URI : " +  uri);
         }
 
         if (tableName != null) {
@@ -109,7 +128,8 @@ public class BakesContentProvider extends ContentProvider {
                     null,
                     null,
                     sortOrder);
-            Log.d(TAG, "Returning " + cursor.getCount() + " data items from table " + tableName);
+            Log.d(TAG, "Returning " + cursor.getCount() +
+                    " data items from table " + tableName);
         }
 
 
@@ -150,12 +170,14 @@ public class BakesContentProvider extends ContentProvider {
     }
 
     /**
-     * returns SQlite query string to query a join table where ingredients have
-     * an extea column to determine whether the ingredient is present in the shopping table
+     * returns SQlite query string to query a join table
+     * where ingredients have an extra column to determine
+     * whether the ingredient is present in the shopping table
      */
     private String getIngredientJoinQuery(){
-        String sqlString =  "SELECT *, CASE " +
-                    "WHEN " + ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME + " IS NULL THEN 0 ELSE 1" +
+        return "SELECT *, CASE " +
+                    "WHEN " + ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME +
+                            " IS NULL THEN 0 ELSE 1" +
                     " END " + IngredientEntry.FLAG_NAME_SHOPPING +
                 " FROM " + IngredientEntry.TABLE_NAME +
                 " LEFT OUTER JOIN " + ShoppingEntry.TABLE_NAME +
@@ -163,7 +185,6 @@ public class BakesContentProvider extends ContentProvider {
                         " = " + ShoppingEntry.COLUMN_RECIPE_FOREING_KEY +
                     " AND " + IngredientEntry.COLUMN_NAME_INGREDIENT_NAME +
                         " = " + ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME;
-        return sqlString;
     }
 
     @Nullable
@@ -175,10 +196,14 @@ public class BakesContentProvider extends ContentProvider {
 
         switch (match) {
             case RECIPES:
-                returnUri = doInsert(RecipeEntry.TABLE_NAME, uri, contentValues);
+                returnUri = doInsert(RecipeEntry.TABLE_NAME,
+                                     uri,
+                                     contentValues);
                 break;
             case SHOPPING:
-                returnUri = doInsert(ShoppingEntry.TABLE_NAME, uri, contentValues);
+                returnUri = doInsert(ShoppingEntry.TABLE_NAME,
+                                     uri,
+                                     contentValues);
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown Uri: " + uri);
@@ -192,18 +217,24 @@ public class BakesContentProvider extends ContentProvider {
     }
 
     /**
-     * helper method that carries out db inserts with the setting provided as its parameters
+     * helper method that carries out db inserts
+     * with the setting provided as its parameters
      */
-    private Uri doInsert(String tableName, Uri contentUri, ContentValues contentValues) {
+    private Uri doInsert(String tableName,
+                         Uri contentUri,
+                         ContentValues contentValues) {
         final SQLiteDatabase database = dbHelper.getWritableDatabase();
         Uri returnUri;
 
-        long id = database.insert(tableName, null, contentValues);
+        long id = database.insert(tableName,
+                                  null,
+                                  contentValues);
         Log.d(TAG, "Data item inserted with id: " + id);
         if (id != -1) {
             returnUri = ContentUris.withAppendedId(contentUri, id);
         } else {
-            throw new SQLException("Failed to insert raw in uri : " + contentUri);
+            throw new SQLException("Failed to insert raw in uri : " +
+                                           contentUri);
         }
         return returnUri;
     }
@@ -214,13 +245,21 @@ public class BakesContentProvider extends ContentProvider {
 
         switch (match) {
             case RECIPES:
-                return executedBulkInsertAt(RecipeEntry.TABLE_NAME, uri, values);
+                return executedBulkInsertAt(RecipeEntry.TABLE_NAME,
+                                            uri,
+                                            values);
             case INGREDIENTS:
-                return executedBulkInsertAt(IngredientEntry.TABLE_NAME, uri, values);
+                return executedBulkInsertAt(IngredientEntry.TABLE_NAME,
+                                            uri,
+                                            values);
             case STEPS:
-                return executedBulkInsertAt(StepEntry.TABLE_NAME, uri, values);
+                return executedBulkInsertAt(StepEntry.TABLE_NAME,
+                                            uri,
+                                            values);
             case SHOPPING:
-                return executedBulkInsertAt(ShoppingEntry.TABLE_NAME, uri, values);
+                return executedBulkInsertAt(ShoppingEntry.TABLE_NAME,
+                                            uri,
+                                            values);
             default:
                 return super.bulkInsert(uri, values);
         }
@@ -235,9 +274,12 @@ public class BakesContentProvider extends ContentProvider {
     }
 
     /**
-     * helper method that carries out bulk insert with settings provided as its parameters
+     * helper method that carries out bulk insert
+     * with settings provided as its parameters
      */
-    private int executedBulkInsertAt(@NonNull String tableName, @NonNull Uri uri, @NonNull ContentValues[] values) {
+    private int executedBulkInsertAt(@NonNull String tableName,
+                                     @NonNull Uri uri,
+                                     @NonNull ContentValues[] values) {
         final SQLiteDatabase database = dbHelper.getWritableDatabase();
         Log.d(TAG, "Bulk inserting : " + values.length + " data items");
 
@@ -258,7 +300,8 @@ public class BakesContentProvider extends ContentProvider {
         }
 
         if (rowInserted > 0) {
-            Log.d(TAG, "Bulk insertion completed  : " + values.length + " data items");
+            Log.d(TAG, "Bulk insertion completed  : " +
+                    values.length + " data items");
             if (getContentResolver() != null) {
                 getContentResolver().notifyChange(uri, null);
             }
@@ -267,7 +310,9 @@ public class BakesContentProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String where, @Nullable String[] selectionArgs) {
+    public int delete(@NonNull Uri uri,
+                      @Nullable String where,
+                      @Nullable String[] selectionArgs) {
         int match = uriMatcher.match(uri);
         final SQLiteDatabase database = dbHelper.getWritableDatabase();
 
@@ -298,7 +343,10 @@ public class BakesContentProvider extends ContentProvider {
 
 
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
+    public int update(@NonNull Uri uri,
+                      @Nullable ContentValues contentValues,
+                      @Nullable String s,
+                      @Nullable String[] strings) {
         return 0;
     }
 }

@@ -2,14 +2,15 @@ package uk.me.desiderio.mimsbakes.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.annotation.IdRes;
 import android.util.Log;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
 /**
- * Utility class to load image using Picasso library. The class sets placeholder and default
- * images when error
+ * Utility class to load image using Picasso library.
+ * The class sets placeholder and default images when error
  */
 
 public class ImageUtils {
@@ -36,10 +37,15 @@ public class ImageUtils {
         }
     }
 
-    public static int getRandomDefaultThumbnailRes(Context context, int arrayRes, int
-            defaultImageRes) {
-        TypedArray placehoders = context.getResources().obtainTypedArray(arrayRes);
+    @IdRes
+    public static int getRandomDefaultThumbnailRes(Context context,
+                                                   int arrayRes,
+                                                   int defaultImageRes) {
+        TypedArray placehoders = context.getResources()
+                .obtainTypedArray(arrayRes);
         int index =  (int) (Math.random() * placehoders.length());
-        return placehoders.getResourceId(index, defaultImageRes);
+        int imageResId = placehoders.getResourceId(index, defaultImageRes);
+        placehoders.recycle();
+        return imageResId;
     }
 }

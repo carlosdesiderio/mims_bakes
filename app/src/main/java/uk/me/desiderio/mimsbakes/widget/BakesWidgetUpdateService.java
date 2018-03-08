@@ -11,14 +11,18 @@ import android.util.Log;
 import uk.me.desiderio.mimsbakes.R;
 
 /**
- * Intent Service to update widget when ingredients are added or remove from shopping list
+ * Intent Service to update widget when ingredients
+ * are added or remove from shopping list
  */
 
 public class BakesWidgetUpdateService extends IntentService {
 
-    public static final String WIDGET_UPDATE_SERVICE_NAME = "BakesWidgetUpdateService_name";
-    public static final String ACTION_INGREDIENT_UPDATE = "action_bakes";
-    private static final String TAG = BakesWidgetUpdateService.class.getSimpleName();
+    public static final String WIDGET_UPDATE_SERVICE_NAME =
+            "BakesWidgetUpdateService_name";
+    public static final String ACTION_INGREDIENT_UPDATE =
+            "action_bakes";
+    private static final String TAG =
+            BakesWidgetUpdateService.class.getSimpleName();
 
     public BakesWidgetUpdateService() {
         super(WIDGET_UPDATE_SERVICE_NAME);
@@ -46,6 +50,7 @@ public class BakesWidgetUpdateService extends IntentService {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
                 new ComponentName(this, BakesAppWidget.class));
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list_view);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds,
+                                                        R.id.widget_list_view);
     }
 }

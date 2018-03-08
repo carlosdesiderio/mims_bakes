@@ -30,20 +30,27 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 public class BakesDataIntentService extends IntentService {
 
     private static final String TAG = BakesDataIntentService.class.getSimpleName();
-    private static final String SERVICE_NAME = BakesDataIntentService.class.getSimpleName();
+    private static final String SERVICE_NAME =
+            BakesDataIntentService.class.getSimpleName();
 
     public static final String BROADCAST_ACTION_INGREDIENT_SHOPPING =
             "data_service_broadcast_shopping_action";
 
-    public static final String EXTRA_DATA_TASK_TYPE = "data_service_task_type";
-    public static final String EXTRA_DATA_RECIPE_ID = "data_service_recipe_id";
-    public static final String EXTRA_DATA_INGREDIENT_LIST = "data_service_ingredient_list";
-    public static final String EXTRA_DATA_INGREDIENT_NAME = "data_service_ingredient_name";
+    public static final String EXTRA_DATA_TASK_TYPE =
+            "data_service_task_type";
+    public static final String EXTRA_DATA_RECIPE_ID =
+            "data_service_recipe_id";
+    public static final String EXTRA_DATA_INGREDIENT_LIST =
+            "data_service_ingredient_list";
+    public static final String EXTRA_DATA_INGREDIENT_NAME =
+            "data_service_ingredient_name";
     public static final String EXTRA_DATA_INGREDIENT_SHOPPING_ACTION =
             "data_service_ingredient_shopping_action";
 
-    public static final String SHOPPING_ACTION_INGREDIENT_INSERT = "data_service_broadcast_insert";
-    public static final String SHOPPING_ACTION_INGREDIENT_DELETE = "data_service_broadcast_delete";
+    public static final String SHOPPING_ACTION_INGREDIENT_INSERT =
+            "data_service_broadcast_insert";
+    public static final String SHOPPING_ACTION_INGREDIENT_DELETE =
+            "data_service_broadcast_delete";
 
     @Retention(SOURCE)
     @StringDef({
@@ -54,12 +61,16 @@ public class BakesDataIntentService extends IntentService {
             TASK_BULK_DELETE_SHOP_INGREDIENT
     })
     public @interface ServiceTaskType {}
-    public static final String TASK_REQUEST_SERVER_DATA = "data_service_server_request";
-    public static final String TASK_BULK_INSERT_SHOP_INGREDIENT = "data_service_bulk_ingredient";
+    public static final String TASK_REQUEST_SERVER_DATA =
+            "data_service_server_request";
+    public static final String TASK_BULK_INSERT_SHOP_INGREDIENT =
+            "data_service_bulk_ingredient";
     public static final String TASK_BULK_DELETE_SHOP_INGREDIENT =
             "data_service_bulk_delete_ingredient";
-    public static final String TASK_INSERT_SHOP_INGREDIENT = "data_service_insert_ingredient";
-    public static final String TASK_DELETE_SHOP_INGREDIENT = "data_service_delete_ingredient";
+    public static final String TASK_INSERT_SHOP_INGREDIENT =
+            "data_service_insert_ingredient";
+    public static final String TASK_DELETE_SHOP_INGREDIENT =
+            "data_service_delete_ingredient";
 
     private final BakesDataUtils dataUtils;
 
@@ -103,7 +114,8 @@ public class BakesDataIntentService extends IntentService {
                 selectionArgs);
 
         if(rowsDeleted > 0) {
-            sendIngredientActionBroadcast(SHOPPING_ACTION_INGREDIENT_DELETE, null);
+            sendIngredientActionBroadcast(SHOPPING_ACTION_INGREDIENT_DELETE,
+                                          null);
         }
     }
 
@@ -115,31 +127,38 @@ public class BakesDataIntentService extends IntentService {
         String selection =
                 ShoppingEntry.COLUMN_RECIPE_FOREING_KEY + "= ? AND " +
                 ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME + "= ? ";
-        String[] selectionArgs = new String[]{String.valueOf(recipeId), ingredientName};
-        int rowsDeleted = getContentResolver().delete(ShoppingEntry.CONTENT_URI, selection,
-                selectionArgs);
+        String[] selectionArgs = new String[]{String.valueOf(recipeId),
+                                                ingredientName};
+        int rowsDeleted = getContentResolver().delete(ShoppingEntry.CONTENT_URI,
+                                                      selection,
+                                                      selectionArgs);
 
         if(rowsDeleted > 0) {
-            sendIngredientActionBroadcast(SHOPPING_ACTION_INGREDIENT_DELETE, ingredientName);
+            sendIngredientActionBroadcast(SHOPPING_ACTION_INGREDIENT_DELETE,
+                                          ingredientName);
         }
     }
 
     private void bulkInsertIngredinetInShoppingList(@Nullable Intent intent) {
         int recipeId = intent.getIntExtra(EXTRA_DATA_RECIPE_ID, 0);
-        List<Ingredient> ingredientList = intent.getParcelableArrayListExtra(EXTRA_DATA_INGREDIENT_LIST);
-        Log.d(TAG, "bulkInsertIngredinetInShoppingList: inserting : " + ingredientList.size());
+        List<Ingredient> ingredientList =
+                intent.getParcelableArrayListExtra(EXTRA_DATA_INGREDIENT_LIST);
 
         ContentValues[] valuesArray = new ContentValues[ingredientList.size()];
         for (int i = 0; i < ingredientList.size(); i++) {
             ContentValues values = new ContentValues();
-            values.put(ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME, ingredientList.get(i).getName());
-            values.put(ShoppingEntry.COLUMN_RECIPE_FOREING_KEY, recipeId);
+            values.put(ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME,
+                       ingredientList.get(i).getName());
+            values.put(ShoppingEntry.COLUMN_RECIPE_FOREING_KEY,
+                       recipeId);
             valuesArray[i] = values;
         }
-        int rowsInserted = getContentResolver().bulkInsert(ShoppingEntry.CONTENT_URI, valuesArray);
+        int rowsInserted = getContentResolver()
+                .bulkInsert(ShoppingEntry.CONTENT_URI, valuesArray);
 
         if(rowsInserted > 0) {
-            sendIngredientActionBroadcast(SHOPPING_ACTION_INGREDIENT_INSERT, null);
+            sendIngredientActionBroadcast(SHOPPING_ACTION_INGREDIENT_INSERT,
+                                          null);
         }
     }
 
@@ -149,12 +168,16 @@ public class BakesDataIntentService extends IntentService {
         Log.d(TAG, "insertIngredientInShoppingList: " + ingredientName);
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME, ingredientName);
-        contentValues.put(ShoppingEntry.COLUMN_RECIPE_FOREING_KEY, recipeId);
-        Uri rowinsertedUri = getContentResolver().insert(ShoppingEntry.CONTENT_URI, contentValues);
+        contentValues.put(ShoppingEntry.COLUMN_NAME_INGREDIENT_NAME,
+                          ingredientName);
+        contentValues.put(ShoppingEntry.COLUMN_RECIPE_FOREING_KEY,
+                          recipeId);
+        Uri rowinsertedUri = getContentResolver()
+                .insert(ShoppingEntry.CONTENT_URI, contentValues);
 
         if(rowinsertedUri != null) {
-            sendIngredientActionBroadcast(SHOPPING_ACTION_INGREDIENT_INSERT, ingredientName);
+            sendIngredientActionBroadcast(SHOPPING_ACTION_INGREDIENT_INSERT,
+                                          ingredientName);
         }
     }
 
@@ -162,7 +185,8 @@ public class BakesDataIntentService extends IntentService {
         Call<List<Recipe>> call = BakesRequestUtils.buildBakingApi();
         call.enqueue(new Callback<List<Recipe>>() {
             @Override
-            public void onResponse(@NonNull Call<List<Recipe>> call, @NonNull Response<List<Recipe>> response) {
+            public void onResponse(@NonNull Call<List<Recipe>> call,
+                                   @NonNull Response<List<Recipe>> response) {
                 List<Recipe> recipes = response.body();
                 dataUtils.persistRecipes(recipes);
                 for(Recipe recipe : recipes){
@@ -171,13 +195,15 @@ public class BakesDataIntentService extends IntentService {
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<Recipe>> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<List<Recipe>> call,
+                                  @NonNull Throwable t) {
 
             }
         });
     }
 
-    private void sendIngredientActionBroadcast(String action, @Nullable String ingredientName) {
+    private void sendIngredientActionBroadcast(String action,
+                                               @Nullable String ingredientName) {
         Log.d(TAG, "sendIngredientActionBroadcast: ");
 
         Intent intent = new Intent(BROADCAST_ACTION_INGREDIENT_SHOPPING);

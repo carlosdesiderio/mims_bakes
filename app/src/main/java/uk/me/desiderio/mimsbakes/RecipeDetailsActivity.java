@@ -65,7 +65,8 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
     private RecipeDetailsFragment detailsFragment;
     private StepVideoFragment stepVideoFragment;
 
-    private final BroadcastReceiver ingredientActionsBroadcastReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver ingredientActionsBroadcastReceiver =
+            new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String message = getIngredientShopActionMessage(intent);
@@ -78,13 +79,16 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         initData(intent);
-        getSupportLoaderManager().restartLoader(RECIPE_LOADER_ID, null, recipeLoaderCallbacks);
+        getSupportLoaderManager().restartLoader(RECIPE_LOADER_ID,
+                                                null,
+                                                recipeLoaderCallbacks);
     }
 
     private void initData(Intent intent) {
         Log.d(TAG, "initData: contains recipe: " +
                 intent.getExtras().containsKey(EXTRA_RECIPE) +
-                " contains id: " + intent.getExtras().containsKey(EXTRA_RECIPE_ID)
+                " contains id: " +
+                intent.getExtras().containsKey(EXTRA_RECIPE_ID)
         );
         if(intent.getExtras().containsKey(EXTRA_RECIPE)) {
             recipe = intent.getParcelableExtra(EXTRA_RECIPE);
@@ -119,10 +123,15 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
         }
 
         recipeLoaderCallbacks = new RecipeLoaderCallbacks();
-        IngredientsLoaderCallbacks ingredientsLoaderCallbacks = new IngredientsLoaderCallbacks();
+        IngredientsLoaderCallbacks ingredientsLoaderCallbacks =
+                new IngredientsLoaderCallbacks();
 
-        getSupportLoaderManager().initLoader(RECIPE_LOADER_ID, null, recipeLoaderCallbacks);
-        getSupportLoaderManager().initLoader(INGREDIENTS_LOADER_ID, null, ingredientsLoaderCallbacks);
+        getSupportLoaderManager().initLoader(RECIPE_LOADER_ID,
+                                             null,
+                                             recipeLoaderCallbacks);
+        getSupportLoaderManager().initLoader(INGREDIENTS_LOADER_ID,
+                                             null,
+                                             ingredientsLoaderCallbacks);
     }
 
     @Override
@@ -176,16 +185,19 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
     /**
      * adds or removes all ingredients to/from the shopping list
      * this is based on whether the ALL ingredients are on the list or not
-     * when only some ingredients are on the list, it will add the remaining ingredient to it
+     * when only some ingredients are on the list,
+     * it will add the remaining ingredient to it
      */
     private void toggleAllIngredientInShoppingList() {
         int recipeId = detailsFragment.getData().getRecipeId();
-        List<Ingredient> ingredientList = detailsFragment.getData().getIngredients();
+        List<Ingredient> ingredientList =
+                detailsFragment.getData().getIngredients();
         String task = (areAllIngredientInShoppingList()) ?
                 TASK_BULK_DELETE_SHOP_INGREDIENT :
                 TASK_BULK_INSERT_SHOP_INGREDIENT;
 
-        Intent dataIntent = new Intent(this, BakesDataIntentService.class);
+        Intent dataIntent = new Intent(this,
+                                       BakesDataIntentService.class);
         dataIntent.putExtra(EXTRA_DATA_TASK_TYPE, task);
         dataIntent.putExtra(EXTRA_DATA_RECIPE_ID, recipeId);
         dataIntent.putParcelableArrayListExtra(
@@ -195,7 +207,8 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
     }
 
     /**
-     * initialises layout flat so that the view shows as a one or two pane layout
+     * initialises layout flat so that the view shows
+     * as a one or two pane layout
      */
     private void initLayoutType() {
         isTwoPane = findViewById(R.id.step_video_fragment) != null;
@@ -212,13 +225,15 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
         StringBuilder stringBuilder;
 
         if(intent.hasExtra(EXTRA_DATA_INGREDIENT_NAME)) {
-            String ingredientName = intent.getStringExtra(EXTRA_DATA_INGREDIENT_NAME);
+            String ingredientName =
+                    intent.getStringExtra(EXTRA_DATA_INGREDIENT_NAME);
             stringBuilder = new StringBuilder(ingredientName);
         } else {
             stringBuilder = new StringBuilder(getString(R.string.shopping_message_all_ingredients));
         }
 
-        String action = intent.getStringExtra(EXTRA_DATA_INGREDIENT_SHOPPING_ACTION);
+        String action = intent.
+                getStringExtra(EXTRA_DATA_INGREDIENT_SHOPPING_ACTION);
         switch (action) {
             case SHOPPING_ACTION_INGREDIENT_DELETE:
                 stringBuilder.append(getString(R.string.shopping_message_removed));
@@ -233,8 +248,9 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
     }
 
     private void showSnackBar(String message) {
-        Snackbar.make(findViewById(R.id.recipe_details_fragment_container), message,
-                Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(findViewById(R.id.recipe_details_fragment_container),
+                      message,
+                      Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -242,7 +258,9 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
         if(isTwoPane) {
             stepVideoFragment.swapData(step);
         } else {
-            Intent intent = new Intent(this, StepVideoActivity.class);
+            Intent intent = new Intent(
+                    this,
+                    StepVideoActivity.class);
             intent.putExtra(EXTRA_STEP, step);
             startActivityForResult(intent, STEP_REQUEST_CODE);
         }
@@ -250,13 +268,15 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
 
     @Override
     public void onRecipeIngredientSelected(Ingredient ingredient, int recipeId) {
-        // sets whether we need to insert or remove ingredient from shopping list
-        // based on whether the ingredient is or not in the list
+        // sets whether we need to insert or remove ingredient
+        // from shopping list based on whether the ingredient
+        // is or not in the list
         String task = (ingredient.getShoppingFlag() == 0)?
                 TASK_INSERT_SHOP_INGREDIENT :
                 TASK_DELETE_SHOP_INGREDIENT;
 
-        Intent intent = new Intent(this, BakesDataIntentService.class);
+        Intent intent = new Intent(this,
+                                   BakesDataIntentService.class);
         intent.putExtra(EXTRA_DATA_TASK_TYPE, task);
         intent.putExtra(EXTRA_DATA_RECIPE_ID, recipeId);
         intent.putExtra(EXTRA_DATA_INGREDIENT_NAME, ingredient.getName());
@@ -265,14 +285,17 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
     }
 
     /**
-     * When rotation to landscape in tablets, {@link StepVideoActivity} is closed to show the two
-     * pain {@link RecipeDetailsActivity}
+     * When rotation to landscape in tablets, {@link StepVideoActivity}
+     * is closed to show the two pain {@link RecipeDetailsActivity}
      *
-     * Ensure that the {@link RecipeDetailsFragment} (right pane) is updated with the same step
-     * that the shown in the {@link StepVideoActivity}
+     * Ensure that the {@link RecipeDetailsFragment} (right pane) is
+     * updated with the same step that the shown in the
+     * {@link StepVideoActivity}
      */
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode,
+                                    int resultCode,
+                                    Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(isTwoPane) {
             Step step = data.getParcelableExtra(EXTRA_STEP);
@@ -284,11 +307,13 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
      * implements {@link LoaderManager.LoaderCallbacks}
      * updates view when ingredients are added or removed from the shopping list
      */
-    private class IngredientsLoaderCallbacks implements LoaderManager.LoaderCallbacks<Cursor> {
+    private class IngredientsLoaderCallbacks
+            implements LoaderManager.LoaderCallbacks<Cursor> {
 
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-            String selection = BakesContentProvider.SELECTION_ALL_RECIPE_INGREDIENT;
+            String selection =
+                    BakesContentProvider.SELECTION_ALL_RECIPE_INGREDIENT;
             String recipeIdString = String.valueOf(recipeId);
             String[] selectionArgs = new String[]{recipeIdString};
 
@@ -302,10 +327,12 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
 
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-            List<Ingredient> ingredientList = BakesDataUtils.getIngredientListFromCursor(cursor);
+            List<Ingredient> ingredientList =
+                    BakesDataUtils.getIngredientListFromCursor(cursor);
             detailsFragment.updateIngredients(ingredientList);
 
-            BakesWidgetUpdateService.startActionUpdateShoppingList(RecipeDetailsActivity.this);
+            BakesWidgetUpdateService.startActionUpdateShoppingList(
+                    RecipeDetailsActivity.this);
         }
 
         @Override
@@ -314,7 +341,8 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
         }
     }
 
-    private class RecipeLoaderCallbacks implements LoaderManager.LoaderCallbacks<Cursor> {
+    private class RecipeLoaderCallbacks
+            implements LoaderManager.LoaderCallbacks<Cursor> {
         @Override
         public Loader<Cursor> onCreateLoader(int id, Bundle args) {
             String selection = RecipeEntry.COLUMN_NAME_ID + "=? ";
