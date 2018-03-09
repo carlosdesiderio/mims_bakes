@@ -44,6 +44,9 @@ public class StepVideoFragment extends Fragment implements
 
     private static final String TAG = StepVideoFragment.class.getSimpleName();
 
+    public static final String KEY_PLAYER_POSITION = "player_position";
+    public static final String KEY_PLAYER_PLAY_WHEN_READY = "player_when_ready";
+
     private TextView descriptionTextView;
     private ProgressBar progressBar;
     private ImageView replayIcon;
@@ -51,14 +54,16 @@ public class StepVideoFragment extends Fragment implements
     private SimpleExoPlayer exoPlayer;
     private SimpleExoPlayerView playerView;
     private ExtractorMediaSource.Factory mediaSourceFactory;
+    private long playerPositionMs;
+    private boolean playWhenReady;
 
     public StepVideoFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup
-            container,
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_step_video,
                                          container,
@@ -76,8 +81,14 @@ public class StepVideoFragment extends Fragment implements
         playerView.setControllerHideOnTouch(false);
         playerView.setControllerShowTimeoutMs(0);
 
-        initializePlayer();
 
+        playWhenReady = true;
+        if(savedInstanceState != null) {
+            playerPositionMs = savedInstanceState.getLong(KEY_PLAYER_POSITION);
+            playWhenReady = savedInstanceState.getBoolean(KEY_PLAYER_PLAY_WHEN_READY);
+        }
+
+        initializePlayer(playerPositionMs, playWhenReady);
 
         playerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -90,6 +101,33 @@ public class StepVideoFragment extends Fragment implements
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
+    }
+
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if (exoPlayer != null) {
+            outState.putLong(KEY_PLAYER_POSITION, exoPlayer.getCurrentPosition());
+            outState.putBoolean(KEY_PLAYER_PLAY_WHEN_READY, exoPlayer.getPlayWhenReady());
+        }
     }
 
     /**
@@ -108,7 +146,8 @@ public class StepVideoFragment extends Fragment implements
         preparePlayer(mediaUri);
     }
 
-    private void initializePlayer() {
+    private void initializePlayer(long positionMs, boolean playWhenReady) {
+        Log.d(TAG, "-- initializePlayer: plaeePos: " + positionMs );
         if (exoPlayer == null) {
             TrackSelector trackSelector = new DefaultTrackSelector();
             exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(),
@@ -123,7 +162,8 @@ public class StepVideoFragment extends Fragment implements
                     new DefaultDataSourceFactory(getContext(), userAgent);
             mediaSourceFactory = new ExtractorMediaSource.Factory
                     (dataSourceFactory);
-            exoPlayer.setPlayWhenReady(true);
+            exoPlayer.seekTo(positionMs);
+            exoPlayer.setPlayWhenReady(playWhenReady);
         }
     }
 
@@ -151,9 +191,11 @@ public class StepVideoFragment extends Fragment implements
     }
 
     private void releasePlayer() {
-        exoPlayer.stop();
-        exoPlayer.release();
-        exoPlayer = null;
+        if (exoPlayer != null) {
+            exoPlayer.stop();
+            exoPlayer.release();
+            exoPlayer = null;
+        }
     }
 
     // toggles pause icon visibility
