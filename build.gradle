@@ -15,6 +15,13 @@ buildscript {
     }
 }
 
+ext {
+    supportLibVersion = '27.1.0'
+    espressoLibVersion = '3.0.1'
+    retrofitLibVersion = '2.3.0'
+    exoplayerLibVersion = '2.6.1'
+}
+
 allprojects {
     repositories {
         google()
