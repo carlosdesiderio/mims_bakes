@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.content.LocalBroadcastManager;
@@ -86,14 +88,13 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
 
     private void initData(Intent intent) {
         Log.d(TAG, "initData: contains recipe: " +
-                intent.getExtras().containsKey(EXTRA_RECIPE) +
+                intent.hasExtra(EXTRA_RECIPE) +
                 " contains id: " +
-                intent.getExtras().containsKey(EXTRA_RECIPE_ID)
-        );
-        if(intent.getExtras().containsKey(EXTRA_RECIPE)) {
+                intent.hasExtra(EXTRA_RECIPE_ID));
+        if(intent.hasExtra(EXTRA_RECIPE)) {
             recipe = intent.getParcelableExtra(EXTRA_RECIPE);
             recipeId = recipe.getRecipeId();
-        } else if(intent.getExtras().containsKey(EXTRA_RECIPE_ID)){
+        } else if(intent.hasExtra(EXTRA_RECIPE_ID)){
             recipeId = intent.getIntExtra(EXTRA_RECIPE_ID, 0);
         }
     }
@@ -102,6 +103,8 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_recipe);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dataUtils = new BakesDataUtils(this);
 

@@ -17,6 +17,8 @@ public class StepVideoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_video);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         Intent intent = getIntent();
 
         boolean isDualPane = getResources().getBoolean(R.bool.has_two_panes);

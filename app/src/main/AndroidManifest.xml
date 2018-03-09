@@ -14,7 +14,6 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -26,9 +25,23 @@
 
         <service android:name=".data.BakesDataIntentService" />
 
-        <activity android:name=".RecipeDetailsActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".StepVideoActivity" />
+        <activity
+            android:name=".RecipeDetailsActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
+        <activity
+            android:name="StepVideoActivity"
+            android:launchMode="singleTop"
+            android:parentActivityName=".RecipeDetailsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".RecipeDetailsActivity" />
+        </activity>
 
         <receiver android:name=".widget.BakesAppWidget">
             <intent-filter>
@@ -39,9 +52,12 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/bakes_app_widget_info" />
         </receiver>
-        <service android:name=".widget.BakesWidgetUpdateService"
-            android:exported="false"/>
-        <service android:name=".widget.BakesRemoteViewService"
+
+        <service
+            android:name=".widget.BakesWidgetUpdateService"
+            android:exported="false" />
+        <service
+            android:name=".widget.BakesRemoteViewService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 

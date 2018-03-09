@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -39,7 +40,12 @@ public class BakesAppWidget extends AppWidgetProvider {
 
         Intent appIntent = new Intent(context, RecipeDetailsActivity.class);
         appIntent.setData(Uri.parse(appIntent.toUri(Intent.URI_INTENT_SCHEME)));
-        PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // creates back stack for the RecipeDetailsActivity
+        PendingIntent appPendingIntent = TaskStackBuilder.create(context)
+                .addNextIntentWithParentStack(appIntent)
+                .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        
         views.setPendingIntentTemplate(R.id.widget_list_view, appPendingIntent);
 
         views.setEmptyView(R.id.widget_list_view, R.id.widget_empty_state_container);
