@@ -33,6 +33,8 @@ import com.google.android.exoplayer2.util.Util;
 
 import uk.me.desiderio.mimsbakes.data.model.Step;
 
+import static uk.me.desiderio.mimsbakes.StepVideoActivity.EXTRA_STEP;
+
 /**
  * Fragment to show video and description of the current {@link Step}
  * <p>
@@ -44,8 +46,8 @@ public class StepVideoFragment extends Fragment implements
 
     private static final String TAG = StepVideoFragment.class.getSimpleName();
 
-    public static final String KEY_PLAYER_POSITION = "player_position";
-    public static final String KEY_PLAYER_PLAY_WHEN_READY = "player_when_ready";
+    public static final String EXTRA_PLAYER_POSITION = "player_position";
+    public static final String EXTRA_PLAYER_PLAY_WHEN_READY = "player_when_ready";
 
     private TextView descriptionTextView;
     private ProgressBar progressBar;
@@ -56,6 +58,7 @@ public class StepVideoFragment extends Fragment implements
     private ExtractorMediaSource.Factory mediaSourceFactory;
     private long playerPositionMs;
     private boolean playWhenReady;
+    private Step step;
 
     public StepVideoFragment() {
         // Required empty public constructor
@@ -81,14 +84,18 @@ public class StepVideoFragment extends Fragment implements
         playerView.setControllerHideOnTouch(false);
         playerView.setControllerShowTimeoutMs(0);
 
-
         playWhenReady = true;
         if(savedInstanceState != null) {
-            playerPositionMs = savedInstanceState.getLong(KEY_PLAYER_POSITION);
-            playWhenReady = savedInstanceState.getBoolean(KEY_PLAYER_PLAY_WHEN_READY);
+            playerPositionMs = savedInstanceState.getLong(EXTRA_PLAYER_POSITION);
+            playWhenReady = savedInstanceState.getBoolean(EXTRA_PLAYER_PLAY_WHEN_READY);
         }
-
         initializePlayer(playerPositionMs, playWhenReady);
+
+        if(savedInstanceState != null) {
+            step = savedInstanceState.getParcelable(EXTRA_STEP);
+            swapData(step);
+            Log.d(TAG, "onCreateView: olala " + playerPositionMs);
+        }
 
         playerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -104,29 +111,23 @@ public class StepVideoFragment extends Fragment implements
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        if (Util.SDK_INT <= 23) {
-            releasePlayer();
-        }
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
-        if (Util.SDK_INT > 23) {
-            releasePlayer();
-        }
+        Log.d(TAG, "onStop: olala  releaseing player");
+        releasePlayer();
     }
-
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         if (exoPlayer != null) {
-            outState.putLong(KEY_PLAYER_POSITION, exoPlayer.getCurrentPosition());
-            outState.putBoolean(KEY_PLAYER_PLAY_WHEN_READY, exoPlayer.getPlayWhenReady());
+            outState.putLong(EXTRA_PLAYER_POSITION, exoPlayer.getCurrentPosition());
+            outState.putBoolean(EXTRA_PLAYER_PLAY_WHEN_READY, exoPlayer.getPlayWhenReady());
+        }
+
+        if(step != null) {
+            outState.putParcelable(EXTRA_STEP, step);
         }
     }
 
@@ -134,6 +135,7 @@ public class StepVideoFragment extends Fragment implements
      * updates view with data provided as its parameter
      */
     public void swapData(Step step) {
+        this.step = step;
         updateViewOnDataChange(step);
     }
 
