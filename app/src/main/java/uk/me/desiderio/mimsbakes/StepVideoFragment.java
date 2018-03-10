@@ -88,11 +88,11 @@ public class StepVideoFragment extends Fragment implements
         if(savedInstanceState != null) {
             playerPositionMs = savedInstanceState.getLong(EXTRA_PLAYER_POSITION);
             playWhenReady = savedInstanceState.getBoolean(EXTRA_PLAYER_PLAY_WHEN_READY);
+            step = savedInstanceState.getParcelable(EXTRA_STEP);
         }
         initializePlayer(playerPositionMs, playWhenReady);
 
-        if(savedInstanceState != null) {
-            step = savedInstanceState.getParcelable(EXTRA_STEP);
+        if(step != null) {
             swapData(step);
             Log.d(TAG, "onCreateView: olala " + playerPositionMs);
         }
