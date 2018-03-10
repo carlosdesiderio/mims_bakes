@@ -35,7 +35,11 @@ public class BakesDataUtils {
     public static List<Ingredient> getIngredientListFromCursor(Cursor cursor) {
         List<Ingredient> ingredientList = new ArrayList<>();
 
-        while (cursor.moveToNext()) {
+        int count = cursor.getCount();
+        int current = cursor.getPosition();
+
+        cursor.moveToFirst();
+        do {
             String name = cursor.getString(cursor.getColumnIndex(
                     IngredientEntry.COLUMN_NAME_INGREDIENT_NAME));
             float quantity = cursor.getFloat(cursor.getColumnIndex(
@@ -48,7 +52,7 @@ public class BakesDataUtils {
 
             Ingredient ingredient = new Ingredient(name, quantity, measure, shopping);
             ingredientList.add(ingredient);
-        }
+        } while (cursor.moveToNext());
 
         return ingredientList;
     }
