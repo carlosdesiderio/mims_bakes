@@ -2,8 +2,8 @@ package uk.me.desiderio.mimsbakes;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import uk.me.desiderio.mimsbakes.data.model.Step;
 
@@ -11,6 +11,8 @@ import uk.me.desiderio.mimsbakes.data.model.Step;
 public class StepVideoActivity extends AppCompatActivity {
 
     public static final String EXTRA_STEP = "extra_step";
+
+    Step step;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,12 +29,11 @@ public class StepVideoActivity extends AppCompatActivity {
             finish();
         }
 
-        Step step = intent.getParcelableExtra(EXTRA_STEP);
 
-        StepVideoFragment videoFragment =
-                (StepVideoFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.step_video_fragment);
+        step = intent.getParcelableExtra(EXTRA_STEP);
+    }
 
-        videoFragment.swapData(step);
+    public Step getStepData() {
+        return this.step;
     }
 }

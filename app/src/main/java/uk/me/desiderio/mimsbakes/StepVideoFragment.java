@@ -4,6 +4,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -84,24 +85,11 @@ public class StepVideoFragment extends Fragment implements
         playerView.setControllerHideOnTouch(false);
         playerView.setControllerShowTimeoutMs(0);
 
-        playWhenReady = true;
-        if(savedInstanceState != null) {
-            playerPositionMs = savedInstanceState.getLong(EXTRA_PLAYER_POSITION);
-            playWhenReady = savedInstanceState.getBoolean(EXTRA_PLAYER_PLAY_WHEN_READY);
-            step = savedInstanceState.getParcelable(EXTRA_STEP);
-        }
-        initializePlayer(playerPositionMs, playWhenReady);
-
-        if(step != null) {
-            swapData(step);
-            Log.d(TAG, "onCreateView: olala " + playerPositionMs);
-        }
-
         playerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    playWhenReady();
+                    startPlaybackWhenReady();
                 }
                 return true;
             }
@@ -111,9 +99,34 @@ public class StepVideoFragment extends Fragment implements
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if(getActivity() instanceof StepVideoActivity) {
+            step = ((StepVideoActivity) getActivity()).getStepData();
+        }
+
+        playWhenReady = true;
+        if(savedInstanceState != null) {
+            playerPositionMs = savedInstanceState.getLong(EXTRA_PLAYER_POSITION);
+            playWhenReady = savedInstanceState.getBoolean(EXTRA_PLAYER_PLAY_WHEN_READY);
+            step = savedInstanceState.getParcelable(EXTRA_STEP);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        initializePlayer();
+
+        if(step != null) {
+            swapData(step);
+        }
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG, "onStop: olala  releaseing player");
         releasePlayer();
     }
 
@@ -148,8 +161,7 @@ public class StepVideoFragment extends Fragment implements
         preparePlayer(mediaUri);
     }
 
-    private void initializePlayer(long positionMs, boolean playWhenReady) {
-        Log.d(TAG, "-- initializePlayer: plaeePos: " + positionMs );
+    private void initializePlayer() {
         if (exoPlayer == null) {
             TrackSelector trackSelector = new DefaultTrackSelector();
             exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(),
@@ -164,8 +176,6 @@ public class StepVideoFragment extends Fragment implements
                     new DefaultDataSourceFactory(getContext(), userAgent);
             mediaSourceFactory = new ExtractorMediaSource.Factory
                     (dataSourceFactory);
-            exoPlayer.seekTo(positionMs);
-            exoPlayer.setPlayWhenReady(playWhenReady);
         }
     }
 
@@ -173,11 +183,13 @@ public class StepVideoFragment extends Fragment implements
         if (exoPlayer != null) {
             exoPlayer.stop();
         }
+        exoPlayer.seekTo(playerPositionMs);
+        exoPlayer.setPlayWhenReady(playWhenReady);
         MediaSource mediaSource = mediaSourceFactory.createMediaSource(mediaUri);
         exoPlayer.prepare(mediaSource);
     }
 
-    private void playWhenReady() {
+    private void startPlaybackWhenReady() {
         int playerState = exoPlayer.getPlaybackState();
         switch (playerState) {
             case Player.STATE_ENDED:
